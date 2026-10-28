@@ -193,6 +193,34 @@ export default function Echoes() {
     setRecording(false); setPaused(false)
   }
 
+  const cancelRecording = () => {
+    if (recorder.current && recorder.current.state !== 'inactive') {
+      recorder.current.onstop = null
+      recorder.current.stop()
+      recorder.current.stream?.getTracks().forEach((track) => track.stop())
+    }
+    chunks.current = []
+    if (audioURL) URL.revokeObjectURL(audioURL)
+    setAudioBlob(null)
+    setAudioURL('')
+    setRecording(false)
+    setPaused(false)
+    setSeconds(0)
+    setNotice('')
+  }
+
+  const restartRecording = async () => {
+    cancelRecording()
+    await startRecording()
+  }
+
+  const discardAudio = () => {
+    if (audioURL) URL.revokeObjectURL(audioURL)
+    setAudioBlob(null)
+    setAudioURL('')
+    setSeconds(0)
+  }
+
   if (view === 'home') return <Landing pending={pending} onEnter={enter} onSignIn={signIn} onExploreDemo={exploreDemo} />
   if (view === 'auth') return <Auth mode={authMode} setMode={setAuthMode} onBack={() => setView('home')} onSuccess={async () => {
     await refresh()
@@ -315,6 +343,13 @@ export default function Echoes() {
               onPause={pauseRecording}
               onStart={startRecording}
               onStop={stopRecording}
+              onCancel={cancelRecording}
+              onRestart={restartRecording}
+              onDiscard={discardAudio}
+              onBack={() => {
+                cancelRecording()
+                navigate('dashboard')
+              }}
               useRecording={() => navigate('create')}
             />
           )}
@@ -831,7 +866,35 @@ function CreateForm({ archives, audioBlob, audioURL, onRecord, onSaved }: { arch
   )
 }
 
-function Recorder({ audio, notice, paused, recording, seconds, onPause, onStart, onStop, useRecording }: { audio: string; notice: string; paused: boolean; recording: boolean; seconds: number; onPause: () => void; onStart: () => void; onStop: () => void; useRecording: () => void }) {
+function Recorder({
+  audio,
+  notice,
+  paused,
+  recording,
+  seconds,
+  onPause,
+  onStart,
+  onStop,
+  onCancel,
+  onRestart,
+  onDiscard,
+  onBack,
+  useRecording,
+}: {
+  audio: string
+  notice: string
+  paused: boolean
+  recording: boolean
+  seconds: number
+  onPause: () => void
+  onStart: () => void
+  onStop: () => void
+  onCancel: () => void
+  onRestart: () => void
+  onDiscard: () => void
+  onBack: () => void
+  useRecording: () => void
+}) {
   const formatTime = (sec: number) => {
     const m = Math.floor(sec / 60)
     const s = sec % 60
@@ -839,46 +902,160 @@ function Recorder({ audio, notice, paused, recording, seconds, onPause, onStart,
   }
 
   return (
-    <div className="max-w-xl text-center mx-auto py-10">
-      <p className="text-[11px] uppercase tracking-[.25em] text-[#E6A764]">Voice of Remembrance</p>
-      <h2 className="mt-2 font-serif text-4xl">Capture their voice.</h2>
-      <p className="mt-2 text-xs text-white/50">Speak naturally. Tell a favorite story, a habit, or a lesson they passed down.</p>
-
-      <div className="my-10">
-        <div className={`mx-auto flex h-32 w-32 items-center justify-center rounded-full border-2 transition-all ${recording ? 'border-red-400 bg-red-500/10 scale-105 animate-pulse' : 'border-[#E6A764]/40 bg-[#E6A764]/5'}`}>
-          <span className="font-mono text-2xl font-medium text-[#E6A764]">{formatTime(seconds)}</span>
-        </div>
-        {recording && <p className="mt-3 text-[10px] tracking-widest uppercase text-red-400">● Live Recording</p>}
+    <div className="max-w-xl mx-auto py-8 text-center">
+      {/* Top back navigation */}
+      <div className="flex items-center justify-between mb-6">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs text-white/70 hover:border-white/40 hover:text-white transition"
+        >
+          <span>← Back to Dashboard</span>
+        </button>
+        {audio && (
+          <button
+            type="button"
+            onClick={onDiscard}
+            className="text-xs text-red-300 hover:text-red-200 transition"
+          >
+            Discard recording
+          </button>
+        )}
       </div>
 
-      <div className="flex justify-center gap-3">
-        {!recording ? (
-          <button className="rounded-full bg-[#E6A764] px-7 py-3 text-xs font-semibold text-[#0A0E14] hover:bg-white transition" onClick={onStart}>
-            Start Recording
-          </button>
-        ) : (
+      <p className="text-[11px] uppercase tracking-[.25em] text-[#E6A764]">Voice of Remembrance</p>
+      <h2 className="mt-2 font-serif text-3xl sm:text-4xl">Capture their voice.</h2>
+      <p className="mt-2 text-xs text-white/50 max-w-md mx-auto">
+        Speak naturally. Tell a favorite story, a generational recipe, or advice passed down through the years.
+      </p>
+
+      {/* Recording Visualizer & Timer */}
+      <div className="my-8">
+        <div
+          className={`mx-auto flex h-32 w-32 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+            recording
+              ? 'border-red-400 bg-red-500/10 scale-105 shadow-xl shadow-red-500/10 animate-pulse'
+              : audio
+              ? 'border-[#E6A764] bg-[#E6A764]/10'
+              : 'border-[#E6A764]/40 bg-[#E6A764]/5'
+          }`}
+        >
+          <span className="font-mono text-2xl font-semibold text-[#E6A764] tabular-nums">
+            {formatTime(seconds)}
+          </span>
+        </div>
+        {recording && (
+          <p className="mt-3 text-[10px] tracking-widest uppercase text-red-400 font-semibold flex items-center justify-center gap-1.5">
+            <span className="inline-block h-2 w-2 rounded-full bg-red-500 animate-ping" />
+            <span>● Live Recording in Progress</span>
+          </p>
+        )}
+        {paused && <p className="mt-2 text-xs text-amber-300">⏸ Recording Paused</p>}
+      </div>
+
+      {/* Recording Controls */}
+      <div className="flex flex-wrap justify-center items-center gap-3">
+        {!recording && !audio && (
           <>
-            <button className="rounded-full border border-white/20 px-5 py-2.5 text-xs hover:bg-white/10" onClick={onPause}>
-              {paused ? 'Resume' : 'Pause'}
+            <button
+              type="button"
+              className="rounded-full bg-[#E6A764] px-8 py-3 text-xs font-semibold text-[#0A0E14] hover:bg-white transition shadow-lg hover:scale-[1.02] duration-200"
+              onClick={onStart}
+            >
+              🎙️ Start Recording
             </button>
-            <button className="rounded-full bg-red-400 px-5 py-2.5 text-xs font-semibold text-[#0A0E14]" onClick={onStop}>
-              Stop & Save
+            <button
+              type="button"
+              className="rounded-full border border-white/20 bg-white/5 px-5 py-3 text-xs font-medium text-white/70 hover:text-white transition"
+              onClick={onBack}
+            >
+              Cancel
+            </button>
+          </>
+        )}
+
+        {recording && (
+          <>
+            <button
+              type="button"
+              className="rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-xs font-medium text-white hover:bg-white/10 transition"
+              onClick={onPause}
+            >
+              {paused ? '▶ Resume' : '⏸ Pause'}
+            </button>
+            <button
+              type="button"
+              className="rounded-full bg-red-500 px-6 py-2.5 text-xs font-semibold text-white hover:bg-red-600 transition shadow-lg"
+              onClick={onStop}
+            >
+              ■ Finish & Review
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-2.5 text-xs text-amber-300 hover:bg-amber-400/20 transition flex items-center gap-1.5"
+              onClick={onRestart}
+              title="Restart recording from zero"
+            >
+              <span>🔄</span>
+              <span>Restart</span>
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/15 px-4 py-2.5 text-xs text-white/50 hover:text-red-300 hover:border-red-400/30 transition"
+              onClick={onCancel}
+              title="Cancel and discard recording"
+            >
+              ✕ Cancel
             </button>
           </>
         )}
       </div>
 
+      {/* Audio Preview & Keepsake Review */}
       {audio && (
-        <div className="mt-8 rounded-2xl border border-[#E6A764]/30 bg-[#E6A764]/5 p-5">
-          <p className="text-[10px] uppercase tracking-widest text-[#E6A764] font-medium">Recording Preview</p>
-          <audio className="mt-2.5 w-full" controls src={audio} />
-          <button className="mt-4 rounded-full bg-[#E6A764] px-6 py-2.5 text-xs font-semibold text-[#0A0E14]" onClick={useRecording}>
-            Use This Recording in Memory →
-          </button>
+        <div className="mt-8 rounded-3xl border border-[#E6A764]/30 bg-gradient-to-b from-[#E6A764]/10 to-transparent p-6 text-left shadow-xl">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-[11px] uppercase tracking-widest text-[#E6A764] font-semibold flex items-center gap-2">
+              <span>✦</span>
+              <span>Voice Recording Captured ({formatTime(seconds)})</span>
+            </p>
+            <span className="text-[10px] text-white/40">Ready to save</span>
+          </div>
+
+          <audio className="w-full rounded-xl mt-1" controls src={audio} />
+
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs text-white hover:border-[#E6A764] hover:text-[#E6A764] transition"
+                onClick={onRestart}
+              >
+                <span>🔄</span>
+                <span>Re-record / Restart</span>
+              </button>
+              <button
+                type="button"
+                className="rounded-full border border-red-400/20 px-4 py-2 text-xs text-red-300 hover:bg-red-400/10 transition"
+                onClick={onDiscard}
+              >
+                <span>✕ Discard</span>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              className="flex items-center gap-2 rounded-full bg-[#E6A764] px-6 py-2.5 text-xs font-semibold text-[#0A0E14] hover:bg-white transition shadow-lg hover:scale-[1.02] duration-200"
+              onClick={useRecording}
+            >
+              <span>Use This Recording in Memory</span>
+              <span>→</span>
+            </button>
+          </div>
         </div>
       )}
 
-      {notice && <p role="alert" className="mt-3 text-xs text-amber-200">{notice}</p>}
+      {notice && <p role="alert" className="mt-4 text-xs text-amber-200">{notice}</p>}
     </div>
   )
 }

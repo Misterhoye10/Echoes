@@ -1,93 +1,103 @@
-# Echoes — The Memories That Stay 🕯️🕊️
+# Echoes — The Memories That Stay 🌾🕊️
 
 > **A Private, AI-Powered Memory Archive Honoring the People We Love**  
-> *Built for the DEV Hacktoberfest 2026 Week 4 Challenge: Ghost in the Machine (#devchallenge #hf26challenge).*
+> *Built for DEV Community Hacktoberfest 2026 Week 4 Challenge: Ghost in the Machine (#devchallenge #hf26challenge).*
 
 ---
 
-![Echoes Preview](public/preview.png)
+![Echoes Sunset Sanctuary](public/sunset.jpg)
 
 ## 🕊️ What is Echoes?
 
-Every family carries a sacred library of stories, laughter, and generational wisdom:
-- A mother's secret ingredient whispered on Sunday mornings.
+> *"Because some voices deserve to live beyond a lifetime."*
+
+Every family carries an irreplaceable library of voices, stories, laughter, and generational wisdom:
+- A mother's favorite bedtime lullaby and her secret recipe whispered on Sunday mornings.
 - A sister's contagious laugh and her quiet advice on courage.
-- A grandfather's weathered pocket watch and his lessons on the value of time.
+- An elder's weathered hands and their lessons on resilience.
 
 Too often, when the people we love pass away, their voices and stories fade from living memory. **Echoes** is an enduring digital sanctuary designed to preserve family voices, life lessons, photographs, and oral histories before they disappear.
 
 ### Our Core Philosophy: Authentic Remembrance, Never Artificial Imitation
-Echoes explicitly **does not** create synthetic chatbots that pretend to speak as a deceased mother, sister, or elder. There is something deeply dishonest about algorithmic imitation. Instead, Echoes keeps their **real voice recordings, exact words, photographs, and authentic wisdom** at the absolute center of the experience.
+Echoes explicitly **does not** create synthetic chatbots that simulate or impersonate the deceased. There is something deeply disrespectful and uncanny about algorithmic grief bots. Instead, Echoes keeps their **real voice recordings, exact words, photographs, and authentic wisdom** safely guarded under sovereign family ownership.
+
+---
+
+## 🚀 One-Click Deploy to Render
+
+Deploy Echoes directly to Render as a full-stack Web Service:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Misterhoye10/Echoes)
+
+### Required Environment Variables on Render:
+- `ELEVENLABS_API_KEY`: Your ElevenLabs API key for commemorative voice narration.
+- `ELEVENLABS_DEFAULT_VOICE_ID`: `JBFqnCBsd6RMkjVDRZzb` (or your preferred voice).
+- `GROQ_API_KEY`: Groq API key for ultra-fast open-weight AI wisdom extraction.
+- `NODE_ENV`: `production`
 
 ---
 
 ## ✨ Key Features
 
-1. **🎙️ ElevenLabs Commemorative Voice Narration**:
-   - Every preserved memory story can be narrated aloud with neural speech from ElevenLabs, allowing families to listen to bedtime stories, recipes, and life advice with emotional reverence.
-   - Pre-loaded with authentic heirloom stories (e.g. *Mom's Sunday Apple Pie*, *Sister's Laughter by the Lake*, *Grandpa's Pocket Watch*).
+1. **🎙️ ElevenLabs Commemorative Voice Narration ("Remembrance Voice")**:
+   - Every preserved memory story can be narrated aloud with neural speech from ElevenLabs (`eleven_turbo_v2_5`), allowing families to hear stories read in a gentle, warm tone.
+   - Pre-loaded with authentic heirloom stories (e.g. *Mom's childhood stories*, *Grandma's lasagna recipe*, *Dad's life advice on courage*).
 
 2. **🧠 Open-Weight AI Wisdom & Tribute Extraction**:
-   - Powered by genuine open-weight models (`qwen/qwen3.8-27b` / `gemma`) on **Groq LPU inference**.
-   - Extracts the core **Life Lesson / Wisdom Quote**, identifies **People & Timelines**, generates a heartfelt **Memorial Tribute**, and organizes memories with **Heirloom Tags**.
+   - Powered by genuine open-weight models (`qwen/qwen3.8-27b`) on lightning-fast **Groq LPU inference**.
+   - Extracts the core **Life Lesson**, generates a respectful **Memorial Tribute**, and organizes memories with **Heirloom Tags**.
 
-3. **🎵 Ambient Candlelight Atmosphere**:
-   - Built-in soothing acoustic piano chords and candlelight soundscape synthesized with the Web Audio API (with live volume and mute toggles in the header).
+3. **🎵 "See You Again" Piano Instrumental**:
+   - Built-in studio instrumental of Wiz Khalifa & Charlie Puth's iconic *"See You Again"*.
+   - Toggle audio directly from the minimalist sound wave icon in the top header.
 
 4. **🎙️ In-Browser High-Fidelity Voice Recording**:
-   - Record authentic spoken stories directly from your microphone with live elapsed timers and audio waveforms.
+   - Capture authentic spoken stories directly from your microphone with live elapsed timers.
+   - Includes **Pause/Resume**, **Restart/Re-record**, and **Cancel/Discard** controls.
 
-5. **🔒 Sovereignty & Privacy by Design**:
-   - Zero corporate data harvesting. Family grief and heirloom memories are never fed into public training datasets. Compatible with local offline open-weight execution.
+5. **🔒 Sovereign Privacy & Security**:
+   - Strict user isolation: users only see and manage their own private family memories.
+   - Offline-ready crypto session authentication with zero external corporate database tracking.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: React 19, TypeScript, Next.js 16 (App Router), Tailwind CSS v4.
-- **Voice Narration**: ElevenLabs Neural Text-to-Speech (`eleven_turbo_v2_5`).
-- **AI Core**: Open-weight instruction models on Groq Cloud LPU.
+- **Full-Stack Framework**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4.
+- **Voice Narration**: ElevenLabs Neural Text-to-Speech API (`eleven_turbo_v2_5`).
+- **Open-Weight AI**: Groq Cloud LPU (`qwen/qwen3.8-27b`).
 - **Audio & Media**: Web Audio API, MediaRecorder API, HTML5 Audio.
-- **Design & Typography**: Warm editorial obsidian palette (`#0B0F14`) with amber candlelight accents (`#F59E0B`, `#D97706`).
+- **Deployment**: Render Web Service (`render.yaml`).
 
 ---
 
-## 🚀 Getting Started Locally
+## 🚀 Running Locally
 
-### 1. Clone the repository
 ```bash
+# 1. Clone the repository
 git clone https://github.com/Misterhoye10/Echoes.git
 cd Echoes
-```
 
-### 2. Install dependencies
-```bash
+# 2. Install dependencies
 npm install
-```
 
-### 3. Configure environment variables
-Create a `.env.local` file based on `.env.example`:
-```bash
-cp .env.example .env.local
-```
-Add your keys:
-```env
+# 3. Configure environment variables in .env.local
 ELEVENLABS_API_KEY=your_elevenlabs_key
+ELEVENLABS_DEFAULT_VOICE_ID=JBFqnCBsd6RMkjVDRZzb
 GROQ_API_KEY=your_groq_key
-```
 
-### 4. Run the development server
-```bash
+# 4. Start local development server
 npm run dev
 ```
+
 Open **[http://localhost:3000](http://localhost:3000)** in your browser!
 
 ---
 
 ## 🏆 Hackathon Tracks & Categories
 
-- **Primary Track**: *Ghost in the Machine* (Honoring the past in the spirit of Día de los Muertos).
-- **Partner Categories**:
+- **Primary Challenge**: *Ghost in the Machine* (Honoring the past in the spirit of Día de los Muertos).
+- **Partner Prize Tracks**:
   - 🎙️ **Best Use of ElevenLabs** ($100 USD)
   - 🧠 **Best Use of Gemma / Open-Weight AI** ($200 USD)
   - 🚀 **Best Use of Render** ($200 USD)
@@ -95,4 +105,4 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser!
 ---
 
 ## 🕯️ In Memoriam
-*Dedicated with love to mothers, sisters, and elders whose voices and wisdom deserve to live beyond a lifetime.* ❤️
+*Dedicated with eternal love and reverence to mothers, sisters, and elders whose voices and wisdom deserve to live beyond a lifetime.* ❤️

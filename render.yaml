@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: echoes
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ELEVENLABS_DEFAULT_VOICE_ID
+        value: JBFqnCBsd6RMkjVDRZzb
+      - key: GROQ_API_KEY
+        sync: false
+      - key: APP_SECRET
+        generateValue: true
