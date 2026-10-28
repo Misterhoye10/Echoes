@@ -5,6 +5,7 @@ import {
   authenticateAction,
   createArchiveAction,
   deleteMemoryAction,
+  loadDemoWorkspaceAction,
   loadWorkspaceAction,
   logoutAction,
   saveMemoryAction,
@@ -79,9 +80,10 @@ const STARTER_MEMORIES: (EchoMemory & { image?: string; duration?: string; categ
 
 export default function Echoes() {
   const [view, setView] = useState<View>('home')
-  const [memories, setMemories] = useState<EchoMemory[]>(STARTER_MEMORIES)
+  const [memories, setMemories] = useState<EchoMemory[]>([])
   const [archives, setArchives] = useState<Archive[]>([{ id: 'family-archive', name: 'Family Archive' }])
-  const [name, setName] = useState('Folarin Oyewole')
+  const [name, setName] = useState('')
+  const [authMode, setAuthMode] = useState<'signup' | 'login'>('signup')
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<EchoMemory | null>(null)
   const [seconds, setSeconds] = useState(0)
@@ -100,28 +102,52 @@ export default function Echoes() {
     return () => clearInterval(timer)
   }, [recording, paused])
 
+  // Check returning visitor session on mount
+  useEffect(() => {
+    refresh()
+  }, [])
+
   const refresh = async () => {
     const workspace = await loadWorkspaceAction()
     if (!workspace.authenticated) {
-      setMemories(STARTER_MEMORIES)
-      setArchives([{ id: 'family-archive', name: 'Family Archive' }])
+      setName('')
+      setMemories([])
       return false
     }
-    setMemories(workspace.memories.length ? workspace.memories : STARTER_MEMORIES)
-    setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: 'Family Archive' }])
-    setName(workspace.name || 'Folarin Oyewole')
+    setName(workspace.name)
+    setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: `${workspace.name}'s Family Archive` }])
+    // Strict isolation: loads strictly this user's actual saved memories
+    setMemories(workspace.memories)
     return true
   }
 
+  // The Arrival: "Enter Family Archive"
   const enter = () => startTransition(async () => {
     const workspace = await loadWorkspaceAction()
     if (!workspace.authenticated) {
-      setView('dashboard')
+      // First-time visitors: proceed to sign up & create archive
+      setAuthMode('signup')
+      setView('auth')
       return
     }
-    setMemories(workspace.memories.length ? workspace.memories : STARTER_MEMORIES)
-    setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: 'Family Archive' }])
-    setName(workspace.name || 'Folarin Oyewole')
+    setName(workspace.name)
+    setArchives(workspace.archives)
+    setMemories(workspace.memories)
+    setView('dashboard')
+  })
+
+  // Returning visitors: "Sign In"
+  const signIn = () => {
+    setAuthMode('login')
+    setView('auth')
+  }
+
+  // Evaluator / Judge: Explore sample archive without signup
+  const exploreDemo = () => startTransition(async () => {
+    const demo = await loadDemoWorkspaceAction()
+    setName(demo.name)
+    setArchives(demo.archives)
+    setMemories(demo.memories)
     setView('dashboard')
   })
 
@@ -167,8 +193,8 @@ export default function Echoes() {
     setRecording(false); setPaused(false)
   }
 
-  if (view === 'home') return <Landing pending={pending} onEnter={enter} onSignIn={() => setView('auth')} />
-  if (view === 'auth') return <Auth onBack={() => setView('home')} onSuccess={async () => {
+  if (view === 'home') return <Landing pending={pending} onEnter={enter} onSignIn={signIn} onExploreDemo={exploreDemo} />
+  if (view === 'auth') return <Auth mode={authMode} setMode={setAuthMode} onBack={() => setView('home')} onSuccess={async () => {
     await refresh()
     setView('dashboard')
   }} />
@@ -403,51 +429,80 @@ function DashboardView({
             <span className="text-[11px] text-[#E6A764] cursor-pointer hover:underline">View all →</span>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-4">
-            {memories.map((m) => {
-              const memory = m as EchoMemory & { image?: string; duration?: string }
-              return (
-                <div
-                  key={memory.id}
-                  onClick={() => onSelect(memory)}
-                  className="group cursor-pointer rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#E6A764]/40 transition overflow-hidden flex flex-col"
+          {memories.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.02] p-8 text-center sm:p-10 space-y-4">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#E6A764]/10 border border-[#E6A764]/20 text-[#E6A764] text-xl">
+                🌾
+              </div>
+              <div>
+                <h4 className="text-sm font-serif font-medium text-white">Your family archive is waiting.</h4>
+                <p className="mt-1.5 text-xs text-white/50 max-w-sm mx-auto leading-relaxed">
+                  Every family has voices and memories worth keeping. Record your first voice note, upload an heirloom photo, or write down a favorite story.
+                </p>
+              </div>
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <button
+                  onClick={onRecord}
+                  className="flex items-center gap-2 rounded-full bg-[#E6A764] px-4 py-2 text-xs font-semibold text-[#0A0E14] hover:bg-white transition shadow-md"
                 >
-                  {memory.image && (
-                    <div className="h-32 w-full overflow-hidden bg-black/40 relative">
-                      <img
-                        src={memory.image}
-                        alt={memory.title}
-                        className="h-full w-full object-cover group-hover:scale-105 transition duration-500 opacity-80"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0E14] via-transparent to-transparent" />
-                    </div>
-                  )}
+                  <Icon name="mic" />
+                  <span>Preserve your first memory</span>
+                </button>
+                <button
+                  onClick={onCreate}
+                  className="rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs font-medium text-white hover:border-[#E6A764] hover:text-[#E6A764] transition"
+                >
+                  ✦ Write a Story
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 gap-4">
+              {memories.map((m) => {
+                const memory = m as EchoMemory & { image?: string; duration?: string }
+                return (
+                  <div
+                    key={memory.id}
+                    onClick={() => onSelect(memory)}
+                    className="group cursor-pointer rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#E6A764]/40 transition overflow-hidden flex flex-col"
+                  >
+                    {memory.image && (
+                      <div className="h-32 w-full overflow-hidden bg-black/40 relative">
+                        <img
+                          src={memory.image}
+                          alt={memory.title}
+                          className="h-full w-full object-cover group-hover:scale-105 transition duration-500 opacity-80"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0E14] via-transparent to-transparent" />
+                      </div>
+                    )}
 
-                  <div className="p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h4 className="text-xs font-semibold text-white group-hover:text-[#E6A764] transition line-clamp-1">
-                        {memory.title}
-                      </h4>
-                      <p className="text-[10px] text-white/40 mt-1">
-                        {memory.duration || 'Story'} · {memory.date}
-                      </p>
-                    </div>
+                    <div className="p-4 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-xs font-semibold text-white group-hover:text-[#E6A764] transition line-clamp-1">
+                          {memory.title}
+                        </h4>
+                        <p className="text-[10px] text-white/40 mt-1">
+                          {memory.duration || 'Story'} · {memory.date}
+                        </p>
+                      </div>
 
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {memory.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-full bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 text-[9px] text-white/50"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {memory.tags.slice(0, 3).map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-full bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 text-[9px] text-white/50"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          )}
         </div>
 
         {/* Right Column: Featured Callout matching screenshot */}
@@ -494,7 +549,17 @@ function DashboardView({
   )
 }
 
-function Landing({ onEnter, onSignIn, pending }: { onEnter: () => void; onSignIn: () => void; pending: boolean }) {
+function Landing({
+  onEnter,
+  onSignIn,
+  onExploreDemo,
+  pending,
+}: {
+  onEnter: () => void
+  onSignIn: () => void
+  onExploreDemo: () => void
+  pending: boolean
+}) {
   return (
     <main className="relative min-h-screen bg-[#0A0E14] text-[#E8EDF2] overflow-hidden">
       {/* 1. Full-screen Sunset Photograph */}
@@ -549,13 +614,13 @@ function Landing({ onEnter, onSignIn, pending }: { onEnter: () => void; onSignIn
               disabled={pending}
               onClick={onEnter}
             >
-              {pending ? 'Opening archive...' : 'Enter Family Archive (Live Demo)'}
+              {pending ? 'Opening archive...' : 'Enter Family Archive'}
             </button>
             <button
               className="rounded-full border border-white/30 bg-black/30 backdrop-blur-md px-6 py-3.5 text-xs font-medium text-white hover:border-[#E6A764] hover:text-[#E6A764] transition"
-              onClick={onEnter}
+              onClick={onExploreDemo}
             >
-              Explore Heirlooms →
+              Explore Sample Archive →
             </button>
           </div>
 
@@ -568,13 +633,24 @@ function Landing({ onEnter, onSignIn, pending }: { onEnter: () => void; onSignIn
   )
 }
 
-function Auth({ onBack, onSuccess }: { onBack: () => void; onSuccess: () => Promise<void> }) {
-  const [mode, setMode] = useState<'signup' | 'login'>('signup')
+function Auth({
+  mode,
+  setMode,
+  onBack,
+  onSuccess,
+}: {
+  mode: 'signup' | 'login'
+  setMode: (m: 'signup' | 'login') => void
+  onBack: () => void
+  onSuccess: () => Promise<void>
+}) {
   const [error, setError] = useState('')
   const [pending, startTransition] = useTransition()
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); setError('')
-    const data = new FormData(event.currentTarget); data.set('mode', mode)
+    event.preventDefault()
+    setError('')
+    const data = new FormData(event.currentTarget)
+    data.set('mode', mode)
     startTransition(async () => {
       const result = await authenticateAction(data)
       if (!result.ok) setError(result.error)
@@ -585,10 +661,12 @@ function Auth({ onBack, onSuccess }: { onBack: () => void; onSuccess: () => Prom
     <main className="grid min-h-screen place-items-center bg-[#0A0E14] p-5 text-white">
       <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.03] p-7 md:p-10 backdrop-blur-xl">
         <button className="text-xs text-white/45 hover:text-white transition" onClick={onBack}>
-          ← Back to Archive
+          ← Back to Arrival
         </button>
         <p className="mt-6 text-xs uppercase tracking-[.25em] text-[#E6A764]">Private family space</p>
-        <h1 className="mt-2 font-serif text-3xl">{mode === 'signup' ? 'Create your archive.' : 'Welcome back.'}</h1>
+        <h1 className="mt-2 font-serif text-3xl">
+          {mode === 'signup' ? 'Create your archive.' : 'Welcome back.'}
+        </h1>
         <form className="mt-6 space-y-4" onSubmit={submit}>
           {mode === 'signup' && (
             <label className="block text-xs">
@@ -598,7 +676,7 @@ function Auth({ onBack, onSuccess }: { onBack: () => void; onSuccess: () => Prom
           )}
           <label className="block text-xs">
             <span className="text-white/70">Email Address</span>
-            <input autoComplete="email" className="field mt-1" name="email" required type="email" placeholder="e.g. yourname@gmail.com" />
+            <input autoComplete="email" className="field mt-1" name="email" required type="email" placeholder="e.g. yourname@family.com" />
           </label>
           <label className="block text-xs">
             <span className="text-white/70">Password</span>
@@ -610,7 +688,7 @@ function Auth({ onBack, onSuccess }: { onBack: () => void; onSuccess: () => Prom
           </button>
         </form>
         <button className="mt-5 w-full text-xs text-white/40 hover:text-white transition" onClick={() => { setMode(mode === 'signup' ? 'login' : 'signup'); setError('') }}>
-          {mode === 'signup' ? 'Already have an account? Sign in' : 'New to Echoes? Create an account'}
+          {mode === 'signup' ? 'Already have an account? Sign in' : 'New to Echoes? Create your archive'}
         </button>
       </div>
     </main>

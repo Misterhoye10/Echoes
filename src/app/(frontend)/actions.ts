@@ -74,6 +74,7 @@ export async function logoutAction() {
   return { ok: true }
 }
 
+// STRICT USER ISOLATION: Loads ONLY the authenticated user's actual saved memories
 export async function loadWorkspaceAction() {
   const user = await currentAppUser()
   if (!user) {
@@ -94,19 +95,39 @@ export async function loadWorkspaceAction() {
     userArchives = [defaultArchive]
   }
 
-  // Get user memories or seed with heirloom starters if empty
-  let userMemories = store.memories.filter((m) => m.ownerId === user.id)
-  if (userMemories.length === 0) {
-    // Also include demo memories if user is demo or newly registered
-    const demoMemories = store.memories.filter((m) => m.ownerId === 'demo-user-1')
-    userMemories = demoMemories.length > 0 ? demoMemories : []
-  }
+  // Load strictly this user's memories (no hardcoded samples leaking into user accounts!)
+  const userMemories = store.memories.filter((m) => m.ownerId === user.id)
 
   return {
     authenticated: true as const,
     name: user.name,
     archives: userArchives.map((archive) => ({ id: archive.id, name: archive.name })),
     memories: userMemories.map((memory) => ({
+      id: memory.id,
+      title: memory.title,
+      date: memory.memoryDate
+        ? new Intl.DateTimeFormat('en', { dateStyle: 'long' }).format(new Date(memory.memoryDate))
+        : 'Date not set',
+      person: memory.personName || 'Unassigned',
+      tags: memory.tags || [],
+      story: memory.story,
+      notes: memory.notes || '',
+      audio: memory.audio,
+      image: memory.image,
+      duration: memory.duration || (memory.audio ? 'Audio · Voice' : 'Story'),
+    })) satisfies EchoMemory[],
+  }
+}
+
+// SAMPLE ARCHIVE FOR DEMO / JUDGES PREVIEW
+export async function loadDemoWorkspaceAction() {
+  const store = readStore()
+  const demoMemories = store.memories.filter((m) => m.ownerId === 'demo-user-1')
+  return {
+    authenticated: false as const,
+    name: 'Sample Family Archive',
+    archives: [{ id: 'demo-archive', name: 'Sample Heirloom Archive' }],
+    memories: demoMemories.map((memory) => ({
       id: memory.id,
       title: memory.title,
       date: memory.memoryDate
@@ -147,7 +168,6 @@ export async function saveMemoryAction(formData: FormData) {
 
   const title = text(formData.get('title'), 180)
   const story = text(formData.get('story'), 20000)
-  const archive = text(formData.get('archive'), 120)
 
   if (!title || !story) {
     return { ok: false, error: 'Title and memory story are required.' }
@@ -202,6 +222,11 @@ export async function updateMemoryAction(id: string, formData: FormData) {
       return { ok: false, error: 'Memory not found.' }
     }
 
+    // Security check: Must belong to this user
+    if (memory.ownerId !== user.id) {
+      return { ok: false, error: 'Unauthorized to modify this memory.' }
+    }
+
     memory.title = text(formData.get('title'), 180) || memory.title
     memory.story = text(formData.get('story'), 20000) || memory.story
     memory.notes = text(formData.get('notes'), 10000)
@@ -220,6 +245,16 @@ export async function deleteMemoryAction(id: string) {
 
   try {
     const store = readStore()
+    const memory = store.memories.find((m) => m.id === id)
+    if (!memory) {
+      return { ok: false, error: 'Memory not found.' }
+    }
+
+    // Security check: Must belong to this user
+    if (memory.ownerId !== user.id) {
+      return { ok: false, error: 'Unauthorized to delete this memory.' }
+    }
+
     store.memories = store.memories.filter((m) => m.id !== id)
     writeStore(store)
     return { ok: true, error: '' }
