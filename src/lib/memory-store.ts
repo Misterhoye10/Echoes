@@ -73,7 +73,7 @@ export function verifySessionToken(token: string): string | null {
   return null
 }
 
-const DEFAULT_MEMORIES: Omit<StoreMemory, 'ownerId'>[] = [
+export const DEFAULT_MEMORIES: Omit<StoreMemory, 'ownerId'>[] = [
   {
     id: 'demo-1',
     title: "Mom's childhood stories",
@@ -135,10 +135,27 @@ function getInitialStore(): DataStore {
     createdAt: new Date().toISOString(),
   }
 
+  const victorSalt = crypto.randomBytes(16).toString('hex')
+  const victorUser: StoreUser = {
+    id: 'demo-user-victor',
+    name: 'Victor',
+    email: 'victor@gmail.com',
+    salt: victorSalt,
+    passwordHash: hashPassword('password123', victorSalt),
+    createdAt: new Date().toISOString(),
+  }
+
   const defaultArchive: StoreArchive = {
     id: 'family-archive',
     name: 'Family Memory Archive',
     ownerId: defaultUser.id,
+    createdAt: new Date().toISOString(),
+  }
+
+  const victorArchive: StoreArchive = {
+    id: 'victor-archive',
+    name: "Victor's Family Archive",
+    ownerId: victorUser.id,
     createdAt: new Date().toISOString(),
   }
 
@@ -147,10 +164,16 @@ function getInitialStore(): DataStore {
     ownerId: defaultUser.id,
   }))
 
+  const victorMemories: StoreMemory[] = DEFAULT_MEMORIES.map((m, idx) => ({
+    ...m,
+    id: `victor-mem-${idx + 1}`,
+    ownerId: victorUser.id,
+  }))
+
   return {
-    users: [defaultUser],
-    archives: [defaultArchive],
-    memories: defaultMemories,
+    users: [defaultUser, victorUser],
+    archives: [defaultArchive, victorArchive],
+    memories: [...defaultMemories, ...victorMemories],
   }
 }
 

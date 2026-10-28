@@ -721,6 +721,24 @@ function Auth({
           <button className="w-full rounded-full bg-[#E6A764] py-3 text-xs font-semibold text-[#0A0E14] hover:bg-white transition disabled:opacity-50" disabled={pending}>
             {pending ? 'Please wait...' : mode === 'signup' ? 'Create secure archive' : 'Sign in'}
           </button>
+          {mode === 'login' && (
+            <button
+              type="button"
+              className="w-full rounded-full border border-[#E6A764]/40 bg-[#E6A764]/10 py-2.5 text-xs font-medium text-[#E6A764] hover:bg-[#E6A764]/20 transition"
+              onClick={() => {
+                const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement
+                const passInput = document.querySelector('input[name="password"]') as HTMLInputElement
+                if (emailInput && passInput) {
+                  emailInput.value = 'victor@gmail.com'
+                  passInput.value = 'password123'
+                  const form = emailInput.closest('form')
+                  if (form) form.requestSubmit()
+                }
+              }}
+            >
+              ⚡ 1-Click Demo Pass (victor@gmail.com)
+            </button>
+          )}
         </form>
         <button className="mt-5 w-full text-xs text-white/40 hover:text-white transition" onClick={() => { setMode(mode === 'signup' ? 'login' : 'signup'); setError('') }}>
           {mode === 'signup' ? 'Already have an account? Sign in' : 'New to Echoes? Create your archive'}
