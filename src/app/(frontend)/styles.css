@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #09131f;
+  --charcoal: #141b23;
+  --amber: #a66c2c;
+  --gold: #d5ad67;
+  --ivory: #f2eee5;
+}
+
+* { box-sizing: border-box; }
+body { font-family: var(--font-sans), sans-serif; }
+.font-serif { font-family: var(--font-serif), serif; }
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+label > span { display: block; margin-bottom: .6rem; font-size: .78rem; color: rgb(242 238 229 / .6); }
+.field { width: 100%; border: 1px solid rgb(255 255 255 / .12); border-radius: .75rem; background: rgb(255 255 255 / .04); padding: .9rem 1rem; color: var(--ivory); outline: none; }
+.field:focus { border-color: rgb(213 173 103 / .65); box-shadow: 0 0 0 3px rgb(213 173 103 / .08); }
+.field::placeholder { color: rgb(255 255 255 / .25); }
+::selection { background: var(--gold); color: var(--navy); }
+
+.wave-bar:nth-child(5n + 1) { height: 28%; }
+.wave-bar:nth-child(5n + 2) { height: 62%; }
+.wave-bar:nth-child(5n + 3) { height: 88%; }
+.wave-bar:nth-child(5n + 4) { height: 46%; }
+.wave-bar:nth-child(5n + 5) { height: 72%; }
+
+.figma-custom-code-fragment {
+  display: contents;
+}
+
+.figma-bypass-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2147483647;
+  transform: translateY(-150%);
+  border-radius: 6px;
+  background: #111827;
+  color: #fff;
+  padding: 8px 12px;
+  font: 600 14px/1.2 system-ui, sans-serif;
+  text-decoration: none;
+}
+
+.figma-bypass-link:focus {
+  transform: translateY(0);
+}
