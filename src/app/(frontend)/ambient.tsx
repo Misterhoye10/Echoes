@@ -2,110 +2,152 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+type TrackOption = {
+  id: string
+  name: string
+  src: string
+  label: string
+}
+
+const TRACKS: TrackOption[] = [
+  {
+    id: 'instrumental',
+    name: 'See You Again (Official Instrumental)',
+    src: '/audio/see-you-again-instrumental.mp3',
+    label: 'Studio Instrumental',
+  },
+  {
+    id: 'piano',
+    name: 'See You Again (Acoustic Piano)',
+    src: '/audio/see-you-again-piano.mp3',
+    label: 'Solo Piano',
+  },
+]
+
 export function AmbientAudio() {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [volume, setVolume] = useState(0.3)
-  const ctxRef = useRef<AudioContext | null>(null)
-  const gainRef = useRef<GainNode | null>(null)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const [volume, setVolume] = useState(0.4)
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  const chords = [
-    [146.83, 220.00, 277.18, 369.99], // D maj7 (D3, A3, C#4, F#4)
-    [196.00, 246.94, 293.66, 369.99], // G maj7 (G3, B3, D4, F#4)
-    [123.47, 185.00, 220.00, 277.18], // B m7   (B2, F#3, A3, C#4)
-    [110.00, 164.81, 220.00, 277.18], // A sus  (A2, E3, A3, C#4)
-  ]
-
-  const playChord = (chord: number[]) => {
-    if (!ctxRef.current || !gainRef.current) return
-    const ctx = ctxRef.current
-    const now = ctx.currentTime
-
-    chord.forEach((freq, idx) => {
-      const osc = ctx.createOscillator()
-      const noteGain = ctx.createGain()
-
-      osc.type = idx === 0 ? 'sine' : 'triangle'
-      osc.frequency.setValueAtTime(freq, now)
-
-      noteGain.gain.setValueAtTime(0, now)
-      noteGain.gain.linearRampToValueAtTime(0.08, now + 1.2 + idx * 0.1)
-      noteGain.gain.exponentialRampToValueAtTime(0.0001, now + 5.5)
-
-      osc.connect(noteGain)
-      noteGain.connect(gainRef.current!)
-
-      osc.start(now)
-      osc.stop(now + 6)
-    })
-  }
-
-  const toggle = () => {
-    if (isPlaying) {
-      if (timerRef.current) clearInterval(timerRef.current)
-      if (ctxRef.current && ctxRef.current.state === 'running') {
-        ctxRef.current.suspend()
-      }
-      setIsPlaying(false)
-    } else {
-      if (!ctxRef.current) {
-        const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-        ctxRef.current = new AudioContextClass()
-        const masterGain = ctxRef.current.createGain()
-        masterGain.gain.setValueAtTime(volume, ctxRef.current.currentTime)
-        masterGain.connect(ctxRef.current.destination)
-        gainRef.current = masterGain
-      } else if (ctxRef.current.state === 'suspended') {
-        ctxRef.current.resume()
-      }
-
-      let chordIndex = 0
-      playChord(chords[chordIndex])
-      timerRef.current = setInterval(() => {
-        chordIndex = (chordIndex + 1) % chords.length
-        playChord(chords[chordIndex])
-      }, 5000)
-
-      setIsPlaying(true)
-    }
-  }
+  const currentTrack = TRACKS[currentTrackIndex]
 
   useEffect(() => {
-    if (gainRef.current && ctxRef.current) {
-      gainRef.current.gain.setValueAtTime(volume, ctxRef.current.currentTime)
+    if (audioRef.current) {
+      audioRef.current.volume = volume
     }
   }, [volume])
 
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
-      if (ctxRef.current) ctxRef.current.close()
+  const togglePlay = async () => {
+    if (!audioRef.current) return
+
+    if (isPlaying) {
+      audioRef.current.pause()
+      setIsPlaying(false)
+    } else {
+      try {
+        await audioRef.current.play()
+        setIsPlaying(true)
+      } catch (err) {
+        console.error('Audio playback error:', err)
+      }
     }
-  }, [])
+  }
+
+  const switchTrack = (index: number) => {
+    setCurrentTrackIndex(index)
+    if (audioRef.current) {
+      audioRef.current.src = TRACKS[index].src
+      audioRef.current.currentTime = 0
+      if (isPlaying) {
+        audioRef.current.play().catch((err) => console.error(err))
+      }
+    }
+  }
+
+  const formatTime = (sec: number) => {
+    if (isNaN(sec) || sec === 0) return '0:00'
+    const m = Math.floor(sec / 60)
+    const s = Math.floor(sec % 60)
+    return `${m}:${s < 10 ? '0' : ''}${s}`
+  }
 
   return (
-    <div className="flex items-center gap-2 rounded-full border border-[var(--gold)]/20 bg-white/5 px-3 py-1.5 text-xs">
+    <div className="flex items-center gap-2 rounded-full border border-[#E6A764]/40 bg-white/[0.04] px-3.5 py-1.5 text-xs shadow-md backdrop-blur-md">
+      {/* Hidden HTML5 Audio Element */}
+      <audio
+        ref={audioRef}
+        src={currentTrack.src}
+        loop
+        preload="auto"
+        onTimeUpdate={() => {
+          if (audioRef.current) {
+            setCurrentTime(audioRef.current.currentTime)
+          }
+        }}
+        onLoadedMetadata={() => {
+          if (audioRef.current) {
+            setDuration(audioRef.current.duration)
+          }
+        }}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+      />
+
+      {/* Main Play/Pause Button */}
       <button
-        onClick={toggle}
-        className="flex items-center gap-1.5 text-[var(--gold)] hover:text-[var(--ivory)] transition"
-        title={isPlaying ? 'Pause ambient atmosphere' : 'Play ambient candlelight atmosphere'}
+        onClick={togglePlay}
+        className="flex items-center gap-1.5 text-[#E6A764] hover:text-white transition font-medium"
+        title={isPlaying ? 'Pause Instrumental' : 'Play See You Again Instrumental'}
       >
-        <span>{isPlaying ? '🎵' : '🔇'}</span>
-        <span className="font-medium tracking-wide">
-          {isPlaying ? 'Ambient Atmosphere' : 'Play Atmosphere'}
+        <span className={isPlaying ? 'animate-pulse text-sm' : 'text-sm'}>
+          {isPlaying ? '🎵' : '▶️'}
+        </span>
+        <span className="tracking-wide">
+          {isPlaying ? 'See You Again' : 'Play Instrumental'}
         </span>
       </button>
+
+      {/* When Playing: Show Track Switcher, Time & Volume */}
       {isPlaying && (
-        <input
-          type="range"
-          min="0.05"
-          max="0.8"
-          step="0.05"
-          value={volume}
-          onChange={(e) => setVolume(parseFloat(e.target.value))}
-          className="h-1 w-14 accent-[var(--gold)] cursor-pointer"
-          title="Atmosphere volume"
-        />
+        <div className="flex items-center gap-2 pl-2 border-l border-white/10">
+          {/* Track switch toggle (Official vs Piano) */}
+          <div className="flex rounded-md bg-white/[0.06] p-0.5 text-[10px]">
+            {TRACKS.map((track, i) => (
+              <button
+                key={track.id}
+                onClick={() => switchTrack(i)}
+                className={`rounded px-1.5 py-0.5 transition ${
+                  currentTrackIndex === i
+                    ? 'bg-[#E6A764] text-[#0A0E14] font-semibold'
+                    : 'text-white/60 hover:text-white'
+                }`}
+                title={`Switch to ${track.name}`}
+              >
+                {track.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Time indicator */}
+          <span className="text-[10px] text-white/40 tabular-nums">
+            {formatTime(currentTime)}
+          </span>
+
+          {/* Volume slider */}
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={volume}
+            onChange={(e) => setVolume(parseFloat(e.target.value))}
+            className="h-1 w-14 accent-[#E6A764] cursor-pointer"
+            title={`Volume: ${Math.round(volume * 100)}%`}
+          />
+        </div>
       )}
     </div>
   )

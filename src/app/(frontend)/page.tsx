@@ -22,48 +22,66 @@ function Icon({ name }: { name: string }) {
     plus: 'M12 5v14M5 12h14', mic: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM5 11a7 7 0 0 0 14 0M12 18v3',
     search: 'm21 21-4.3-4.3M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z', users: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
     lock: 'M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4', folder: 'M3 6h7l2 2h9v11H3z', play: 'm9 7 8 5-8 5z',
-    pause: 'M9 7v10M15 7v10', stop: 'M8 8h8v8H8z', sparkle: 'M12 3l1.9 4.8L19 9.7l-3.8 3.7.9 5.3L12 16.4l-4.1 2.3.9-5.3L5 9.7l5.1-1.9L12 3z',
-    sound: 'M11 5L6 9H2v6h4l5 4V5zm8.5 7c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM17 4.27v2.06c2.89.86 5 3.54 5 6.67s-2.11 5.81-5 6.67v2.06c4.01-.91 7-4.49 7-8.73s-2.99-7.82-7-8.73z'
+    pause: 'M9 7v10M15 7v10', stop: 'M8 8h8v8H8z', upload: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12',
+    import: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12',
+    note: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'
   }
   return <svg aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" viewBox="0 0 24 24"><path d={paths[name] || paths.home} /></svg>
 }
 
-// Sample starter heirlooms for judges and demo exploration
-const STARTER_MEMORIES: EchoMemory[] = [
+// Pre-loaded heirloom memories exactly matching your design system
+const STARTER_MEMORIES: (EchoMemory & { image?: string; duration?: string; category?: string })[] = [
   {
     id: 'demo-1',
-    title: "Mom's Sunday Apple Pie & The Art of Patience",
-    date: 'October 14, 2023',
+    title: "Mom's childhood stories",
+    date: 'March 12, 2023',
     person: 'Mom',
-    tags: ['recipe', 'tradition', 'childhood', 'family'],
-    story: "Every single Sunday morning, no matter how cold or rainy it was outside, Mom would wake up at sunrise to start baking. The whole kitchen would fill with the scent of warm cinnamon, cloves, and tart apples. She never used a timer — she always told us: 'You don't bake with the clock, you bake with your senses and your heart.' She taught us that patience isn't just waiting; it's the love you put into the quiet moments before the sweetness arrives.",
-    notes: 'Preserved from our 2023 kitchen interview recording.',
+    tags: ['family', 'childhood', 'stories'],
+    duration: 'Audio · 12 min',
+    image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
+    story: "Every Sunday morning, Mom would gather us on the porch and tell stories about growing up in the old house by the river. 'We didn't have much,' she would say, 'but we had laughter, fresh bread, and each other.' She taught us that gratitude turns what we have into enough.",
+    notes: 'Recorded on the back porch with the spring rain falling.',
   },
   {
     id: 'demo-2',
-    title: "Sister's Laughter by the Lake & Her Advice on Fear",
-    date: 'July 18, 2022',
-    person: 'Maya',
-    tags: ['sister', 'summer', 'resilience', 'laughter'],
-    story: "We were sitting on the wooden dock as the sun dipped behind the pines, dangling our bare feet in the cold water. I was terrified about moving away for my new job. She burst into that contagious, loud laugh of hers and nudged my shoulder. 'Fear is just excitement without breath,' she whispered. 'Breathe, take the leap, and remember whose daughter you are.' I still hear her laugh every time I have to be brave.",
-    notes: 'Recorded during our last family cabin trip.',
+    title: "Grandma's lasagna recipe",
+    date: 'Feb 28, 2023',
+    person: 'Grandma Maria',
+    tags: ['food', 'recipe', 'traditions'],
+    duration: 'Note · 5 min',
+    image: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=600&q=80',
+    story: "The secret is three layers of slow-simmered San Marzano tomatoes, fresh basil bruised by hand (never cut with metal), and ricotta folded with nutmeg. She told us: 'You don't rush the sauce. You let it talk to the garlic until they become friends.'",
+    notes: 'Preserved handwritten recipe card from 1968.',
   },
   {
     id: 'demo-3',
-    title: "Grandpa's Pocket Watch & The Meaning of Time",
-    date: 'September 5, 2021',
-    person: 'Grandpa Joe',
-    tags: ['grandfather', 'wisdom', 'legacy', 'heirloom'],
-    story: "He pulled out his weathered brass pocket watch, its surface worn smooth by fifty years in his coat pocket. He placed it in my palm. It didn't just tick; it felt heavy with history. 'Son,' he said, 'a watch doesn't give you time. It only reminds you that every heartbeat is a gift you cannot spend twice. Spend yours on people, not things.'",
-    notes: 'Preserved with photograph of the watch.',
+    title: "Dad's life advice on courage",
+    date: 'Jan 15, 2023',
+    person: 'Dad',
+    tags: ['wisdom', 'life', 'advice'],
+    duration: 'Audio · 8 min',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80',
+    story: "Dad sat down at the workbench, wiping grease off his hands with a rag. 'Son, courage isn't the absence of fear. Courage is walking straight through the trembling because what's waiting on the other side is worth it.' I still carry those words in my pocket every day.",
+    notes: 'Recorded in the garage during winter break.',
+  },
+  {
+    id: 'demo-4',
+    title: "Our family trip to the mountains",
+    date: 'Aug 6, 2022',
+    person: 'The Family',
+    tags: ['travel', 'family', 'adventure'],
+    duration: 'Photo · 24 photos',
+    image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+    story: "We reached the peak just as the fog broke over the valley. Everyone was exhausted, but as the golden sunlight hit our faces, we all went completely silent. Maya reached out and held Mom's hand. That was the moment time stood still.",
+    notes: 'Heirloom family photo album from the Rockies trip.',
   }
 ]
 
 export default function Echoes() {
   const [view, setView] = useState<View>('home')
   const [memories, setMemories] = useState<EchoMemory[]>(STARTER_MEMORIES)
-  const [archives, setArchives] = useState<Archive[]>([{ id: 'family-archive', name: 'Our Family Legacy' }])
-  const [name, setName] = useState('Alex')
+  const [archives, setArchives] = useState<Archive[]>([{ id: 'family-archive', name: 'Family Archive' }])
+  const [name, setName] = useState('Alex Rivera')
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<EchoMemory | null>(null)
   const [seconds, setSeconds] = useState(0)
@@ -86,12 +104,12 @@ export default function Echoes() {
     const workspace = await loadWorkspaceAction()
     if (!workspace.authenticated) {
       setMemories(STARTER_MEMORIES)
-      setArchives([{ id: 'family-archive', name: 'Our Family Legacy' }])
+      setArchives([{ id: 'family-archive', name: 'Family Archive' }])
       return false
     }
     setMemories(workspace.memories.length ? workspace.memories : STARTER_MEMORIES)
-    setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: 'Our Family Legacy' }])
-    setName(workspace.name || 'Alex')
+    setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: 'Family Archive' }])
+    setName(workspace.name || 'Alex Rivera')
     return true
   }
 
@@ -102,8 +120,8 @@ export default function Echoes() {
       return
     }
     setMemories(workspace.memories.length ? workspace.memories : STARTER_MEMORIES)
-    setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: 'Our Family Legacy' }])
-    setName(workspace.name)
+    setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: 'Family Archive' }])
+    setName(workspace.name || 'Alex Rivera')
     setView('dashboard')
   })
 
@@ -162,48 +180,134 @@ export default function Echoes() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--navy)] text-[var(--ivory)]">
-      <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-white/10 bg-[var(--navy)]/90 px-5 backdrop-blur-xl md:px-10">
+    <main className="min-h-screen bg-[#0A0E14] text-[#E8EDF2] font-sans antialiased">
+      {/* Top Header */}
+      <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-white/[0.08] bg-[#0A0E14]/90 px-6 backdrop-blur-xl md:px-8">
         <div className="flex items-center gap-3">
-          <button className="font-serif text-2xl tracking-wide text-[var(--gold)]" onClick={() => setView('home')}>Echoes</button>
-          <span className="hidden text-xs text-white/40 md:inline font-mono">✦ Memory Archive</span>
+          <button className="flex items-center gap-2 text-xl font-medium tracking-wide text-white" onClick={() => setView('home')}>
+            <span className="text-[#E6A764]">🌾</span>
+            <span className="font-serif">Echoes</span>
+          </button>
         </div>
         
-        <div className="hidden w-full max-w-md items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 md:flex">
+        <div className="hidden w-full max-w-md items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 md:flex">
           <Icon name="search" />
-          <input aria-label="Search memories" className="w-full bg-transparent py-2.5 text-sm outline-none placeholder:text-white/35" onChange={(event) => { setQuery(event.target.value); setView('dashboard') }} placeholder="Search a person, date, tag, or story..." value={query} />
+          <input
+            aria-label="Search memories"
+            className="w-full bg-transparent text-xs outline-none placeholder:text-white/30 text-white"
+            onChange={(event) => { setQuery(event.target.value); setView('dashboard') }}
+            placeholder="Search memories, people, or tags..."
+            value={query}
+          />
         </div>
 
         <div className="flex items-center gap-3">
           <AmbientAudio />
-          <button className="rounded-full bg-[var(--gold)]/15 border border-[var(--gold)]/40 px-4 py-2 text-sm text-[var(--gold)] hover:bg-[var(--gold)] hover:text-[var(--navy)] transition" onClick={() => navigate('create')}>+ Add memory</button>
+          <div className="flex items-center gap-2 pl-2 border-l border-white/10">
+            <div className="h-8 w-8 rounded-full bg-[#E6A764]/20 border border-[#E6A764]/40 flex items-center justify-center text-xs font-semibold text-[#E6A764]">
+              AR
+            </div>
+          </div>
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1500px] md:grid-cols-[240px_1fr]">
-        <nav className="hidden min-h-[calc(100vh-5rem)] border-r border-white/10 p-5 md:block">
-          <p className="mb-6 px-3 text-[10px] uppercase tracking-[.25em] text-white/40">{archives[0]?.name || 'Family Archive'}</p>
-          <Navigation current={view} navigate={navigate} />
-          
-          <div className="mt-8 rounded-2xl border border-[var(--gold)]/20 bg-[var(--gold)]/5 p-4">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-[var(--gold)]">✦</span>
-              <p className="text-xs font-semibold text-[var(--gold)]">Open-Source AI & ElevenLabs</p>
-            </div>
-            <p className="mt-2 text-xs leading-5 text-white/60">
-              Preserved with Google Gemma 2 & ElevenLabs narration. Memories remain sovereign, private, and forever yours.
-            </p>
+      {/* Main Grid: Sidebar + Workspace */}
+      <div className="mx-auto grid max-w-[1600px] md:grid-cols-[220px_1fr]">
+        {/* Left Navigation Sidebar matching Screenshot */}
+        <aside className="hidden min-h-[calc(100vh-4rem)] border-r border-white/[0.08] p-4 md:flex flex-col justify-between">
+          <div>
+            <nav className="space-y-1">
+              {[
+                ['dashboard', 'home', 'Home'],
+                ['dashboard', 'note', 'Memories'],
+                ['people', 'users', 'People'],
+                ['collections', 'folder', 'Collections'],
+                ['dashboard', 'search', 'Search'],
+              ].map(([key, icon, label]) => (
+                <button
+                  key={label}
+                  onClick={() => navigate(key as View)}
+                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition ${
+                    (key === 'dashboard' && label === 'Home' && view === 'dashboard')
+                      ? 'bg-white/[0.08] text-[#E6A764]'
+                      : 'text-white/50 hover:bg-white/[0.04] hover:text-white'
+                  }`}
+                >
+                  <Icon name={icon} />
+                  <span>{label}</span>
+                </button>
+              ))}
+            </nav>
           </div>
 
-          <button className="mt-5 px-3 text-xs text-white/35 hover:text-white transition" onClick={() => startTransition(async () => { await logoutAction(); setView('home') })}>Sign out / Switch account</button>
-        </nav>
+          <div className="border-t border-white/[0.08] pt-4">
+            <div className="flex items-center gap-2.5 px-2">
+              <div className="h-7 w-7 rounded-full bg-[#E6A764]/20 flex items-center justify-center text-xs text-[#E6A764]">
+                👤
+              </div>
+              <div className="text-left text-xs">
+                <p className="font-medium text-white/90 leading-tight">Alex Rivera</p>
+                <p className="text-[10px] text-white/40">Family Archive</p>
+              </div>
+            </div>
+            <button
+              onClick={() => startTransition(async () => { await logoutAction(); setView('home') })}
+              className="mt-3 block w-full px-2 text-left text-[11px] text-white/30 hover:text-white transition"
+            >
+              Sign out
+            </button>
+          </div>
+        </aside>
 
-        <section className="min-w-0 p-5 pb-28 md:p-10">
-          {view === 'dashboard' && <Dashboard memories={filtered} name={name} onCreate={() => navigate('create')} onSelect={setSelected} query={query} setQuery={setQuery} />}
-          {view === 'create' && <CreateForm archives={archives} audioBlob={audioBlob} audioURL={audioURL} onRecord={() => navigate('record')} onSaved={async () => { await refresh(); setAudioBlob(null); setAudioURL(''); setView('dashboard') }} />}
-          {view === 'record' && <Recorder audio={audioURL} notice={notice} paused={paused} recording={recording} seconds={seconds} onPause={pauseRecording} onStart={startRecording} onStop={stopRecording} useRecording={() => navigate('create')} />}
-          {view === 'people' && <SimplePage eyebrow="People" title="The voices in your archive" copy="Honoring family elders, parents, and ancestors whose stories live on through your remembrance." cards={peopleCards(memories)} />}
-          {view === 'collections' && <SimplePage eyebrow="Collections" title="Stories that belong together" copy="Themed collections grouping wisdom, holiday recipes, childhood memories, and life advice." cards={tagCards(memories)} />}
+        {/* Workspace Body */}
+        <section className="min-w-0 p-6 md:p-8">
+          {view === 'dashboard' && (
+            <DashboardView
+              memories={filtered}
+              name={name}
+              onRecord={() => navigate('record')}
+              onCreate={() => navigate('create')}
+              onSelect={setSelected}
+            />
+          )}
+          {view === 'create' && (
+            <CreateForm
+              archives={archives}
+              audioBlob={audioBlob}
+              audioURL={audioURL}
+              onRecord={() => navigate('record')}
+              onSaved={async () => { await refresh(); setAudioBlob(null); setAudioURL(''); setView('dashboard') }}
+            />
+          )}
+          {view === 'record' && (
+            <Recorder
+              audio={audioURL}
+              notice={notice}
+              paused={paused}
+              recording={recording}
+              seconds={seconds}
+              onPause={pauseRecording}
+              onStart={startRecording}
+              onStop={stopRecording}
+              useRecording={() => navigate('create')}
+            />
+          )}
+          {view === 'people' && (
+            <SimplePage
+              eyebrow="People"
+              title="The voices in your archive"
+              copy="Honoring family elders, parents, and ancestors whose stories live on through your remembrance."
+              cards={peopleCards(memories)}
+            />
+          )}
+          {view === 'collections' && (
+            <SimplePage
+              eyebrow="Collections"
+              title="Stories that belong together"
+              copy="Themed collections grouping wisdom, holiday recipes, childhood memories, and life advice."
+              cards={tagCards(memories)}
+            />
+          )}
           {view === 'privacy' && <Privacy memories={memories.length} />}
         </section>
       </div>
@@ -214,50 +318,215 @@ export default function Echoes() {
   )
 }
 
-function Navigation({ current, navigate }: { current: View; navigate: (view: View) => void }) {
-  const items = [['dashboard','home','Your archive'],['record','mic','Record voice'],['people','users','People'],['collections','folder','Collections'],['privacy','lock','Privacy']] as [View,string,string][]
-  return <>{items.map(([key, icon, label]) => <button className={`mb-1.5 flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-sm transition ${current === key ? 'bg-white/10 text-[var(--gold)] font-medium' : 'text-white/60 hover:bg-white/5 hover:text-white'}`} key={key} onClick={() => navigate(key)}><Icon name={icon} />{label}</button>)}</>
+function MobileNavigation({ current, navigate }: { current: View; navigate: (view: View) => void }) {
+  const items = [['dashboard','home','Home'],['record','mic','Record'],['collections','folder','Collections'],['privacy','lock','Privacy']] as [View,string,string][]
+  return <nav className="fixed bottom-0 left-0 right-0 z-20 flex border-t border-white/10 bg-[#0A0E14]/95 p-2 backdrop-blur-xl md:hidden">{items.map(([key, icon, label]) => <button className={`flex flex-1 flex-col items-center gap-1 py-1.5 text-[10px] ${current === key ? 'text-[#E6A764]' : 'text-white/40'}`} key={key} onClick={() => navigate(key)}><Icon name={icon} />{label}</button>)}</nav>
 }
 
-function MobileNavigation({ current, navigate }: { current: View; navigate: (view: View) => void }) {
-  const items = [['dashboard','home','Archive'],['record','mic','Record'],['collections','folder','Collections'],['privacy','lock','Privacy']] as [View,string,string][]
-  return <nav className="fixed bottom-0 left-0 right-0 z-20 flex border-t border-white/10 bg-[var(--navy)]/95 p-2 backdrop-blur-xl md:hidden">{items.map(([key, icon, label]) => <button className={`flex flex-1 flex-col items-center gap-1 py-1.5 text-[10px] ${current === key ? 'text-[var(--gold)]' : 'text-white/40'}`} key={key} onClick={() => navigate(key)}><Icon name={icon} />{label}</button>)}</nav>
+// -------------------------------------------------------------
+// EXACT DASHBOARD RECONSTRUCTED FROM USER'S DESIGN SCREENSHOT
+// -------------------------------------------------------------
+function DashboardView({
+  memories,
+  name,
+  onRecord,
+  onCreate,
+  onSelect,
+}: {
+  memories: EchoMemory[]
+  name: string
+  onRecord: () => void
+  onCreate: () => void
+  onSelect: (m: EchoMemory) => void
+}) {
+  return (
+    <div className="space-y-8 max-w-[1400px]">
+      {/* 1. Header Greeting matching screenshot */}
+      <div>
+        <h2 className="text-2xl md:text-3xl font-serif font-medium text-white">Good morning, {name.split(' ')[0]}</h2>
+        <p className="text-xs text-white/50 mt-1">The stories you save today, become tomorrow's legacy.</p>
+      </div>
+
+      {/* 2. Top 4 Action Cards matching screenshot */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <button
+          onClick={onRecord}
+          className="group flex flex-col items-center justify-center p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-[#E6A764]/40 transition text-center"
+        >
+          <div className="h-10 w-10 rounded-full bg-[#E6A764]/10 border border-[#E6A764]/20 flex items-center justify-center text-[#E6A764] mb-3 group-hover:scale-105 transition">
+            <Icon name="mic" />
+          </div>
+          <span className="text-xs font-medium text-white">Record Audio</span>
+          <span className="text-[10px] text-white/40 mt-0.5">Capture a voice or story</span>
+        </button>
+
+        <button
+          onClick={onCreate}
+          className="group flex flex-col items-center justify-center p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-[#E6A764]/40 transition text-center"
+        >
+          <div className="h-10 w-10 rounded-full bg-[#E6A764]/10 border border-[#E6A764]/20 flex items-center justify-center text-[#E6A764] mb-3 group-hover:scale-105 transition">
+            <Icon name="upload" />
+          </div>
+          <span className="text-xs font-medium text-white">Upload File</span>
+          <span className="text-[10px] text-white/40 mt-0.5">Photos, documents, video</span>
+        </button>
+
+        <button
+          onClick={onCreate}
+          className="group flex flex-col items-center justify-center p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-[#E6A764]/40 transition text-center"
+        >
+          <div className="h-10 w-10 rounded-full bg-[#E6A764]/10 border border-[#E6A764]/20 flex items-center justify-center text-[#E6A764] mb-3 group-hover:scale-105 transition">
+            <Icon name="note" />
+          </div>
+          <span className="text-xs font-medium text-white">Add Memory</span>
+          <span className="text-[10px] text-white/40 mt-0.5">Write a story or note</span>
+        </button>
+
+        <button
+          onClick={onCreate}
+          className="group flex flex-col items-center justify-center p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-[#E6A764]/40 transition text-center"
+        >
+          <div className="h-10 w-10 rounded-full bg-[#E6A764]/10 border border-[#E6A764]/20 flex items-center justify-center text-[#E6A764] mb-3 group-hover:scale-105 transition">
+            <Icon name="import" />
+          </div>
+          <span className="text-xs font-medium text-white">Import</span>
+          <span className="text-[10px] text-white/40 mt-0.5">From your device</span>
+        </button>
+      </div>
+
+      {/* 3. Main Split: Recent Memories on Left + Featured Callout Card on Right */}
+      <div className="grid lg:grid-cols-[1fr_340px] gap-6 items-start">
+        {/* Left Column: Recent Memories */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold tracking-wide text-white">Recent Memories</h3>
+            <span className="text-[11px] text-[#E6A764] cursor-pointer hover:underline">View all →</span>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            {memories.map((m) => {
+              const memory = m as EchoMemory & { image?: string; duration?: string }
+              return (
+                <div
+                  key={memory.id}
+                  onClick={() => onSelect(memory)}
+                  className="group cursor-pointer rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#E6A764]/40 transition overflow-hidden flex flex-col"
+                >
+                  {memory.image && (
+                    <div className="h-32 w-full overflow-hidden bg-black/40 relative">
+                      <img
+                        src={memory.image}
+                        alt={memory.title}
+                        className="h-full w-full object-cover group-hover:scale-105 transition duration-500 opacity-80"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0E14] via-transparent to-transparent" />
+                    </div>
+                  )}
+
+                  <div className="p-4 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h4 className="text-xs font-semibold text-white group-hover:text-[#E6A764] transition line-clamp-1">
+                        {memory.title}
+                      </h4>
+                      <p className="text-[10px] text-white/40 mt-1">
+                        {memory.duration || 'Story'} · {memory.date}
+                      </p>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {memory.tags.slice(0, 3).map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 text-[9px] text-white/50"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Right Column: Featured Callout matching screenshot */}
+        <div className="rounded-3xl border border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-black/30 p-6 flex flex-col justify-between relative overflow-hidden">
+          <div className="space-y-4">
+            <div className="h-28 w-full rounded-2xl overflow-hidden bg-black/40 relative">
+              <img
+                src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80"
+                alt="Vintage microphone and candle glow"
+                className="h-full w-full object-cover opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0E14] via-transparent to-transparent" />
+              <div className="absolute bottom-2 left-3 flex items-center gap-1.5 text-xs text-[#E6A764] font-medium">
+                <span>🎙️</span>
+                <span>Oral Heritage</span>
+              </div>
+            </div>
+
+            <h3 className="text-lg font-serif text-white">Every voice has a story.</h3>
+            <p className="text-xs text-white/60 leading-relaxed">
+              Record a conversation, upload a photo, or write a memory. Our AI helps you transcribe, organize and make it searchable — so nothing gets lost.
+            </p>
+          </div>
+
+          <div className="mt-6 space-y-2.5">
+            <button
+              onClick={onRecord}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#E6A764] py-2.5 text-xs font-semibold text-[#0A0E14] hover:bg-[#F3B777] transition shadow-md"
+            >
+              <Icon name="mic" />
+              <span>Start Recording</span>
+            </button>
+            <button
+              onClick={onCreate}
+              className="w-full flex items-center justify-center gap-2 rounded-xl border border-white/20 py-2.5 text-xs font-medium text-white hover:bg-white/[0.05] transition"
+            >
+              <Icon name="upload" />
+              <span>Upload a File</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 function Landing({ onEnter, onSignIn, pending }: { onEnter: () => void; onSignIn: () => void; pending: boolean }) {
   return (
-    <main className="min-h-screen bg-[var(--navy)] text-[var(--ivory)]">
-      <nav className="absolute z-10 flex w-full items-center justify-between px-6 py-7 md:px-14">
+    <main className="min-h-screen bg-[#0A0E14] text-[#E8EDF2]">
+      <nav className="absolute z-10 flex w-full items-center justify-between px-6 py-6 md:px-12">
         <div className="flex items-center gap-3">
-          <span className="font-serif text-3xl text-[var(--gold)]">Echoes</span>
-          <span className="rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/10 px-2.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--gold)]">✦ Memorial Archive</span>
+          <span className="font-serif text-3xl text-[#E6A764]">🌾 Echoes</span>
         </div>
         <div className="flex items-center gap-4">
           <AmbientAudio />
-          <button className="rounded-full border border-white/20 px-5 py-2 text-sm hover:border-[var(--gold)] hover:text-[var(--gold)] transition" disabled={pending} onClick={onSignIn}>Sign in</button>
+          <button className="rounded-full border border-white/20 px-5 py-1.5 text-xs hover:border-[#E6A764] hover:text-[#E6A764] transition" disabled={pending} onClick={onSignIn}>Sign in</button>
         </div>
       </nav>
 
       <section className="relative flex min-h-screen items-end overflow-hidden px-6 pb-20 pt-32 md:items-center md:px-14">
         <img alt="Quiet family memory portrait at sunset" className="absolute inset-0 h-full w-full object-cover opacity-35" src="/preview.png" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--navy)] via-[var(--navy)]/85 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0E14] via-[#0A0E14]/85 to-transparent" />
         <div className="relative max-w-3xl">
-          <p className="mb-5 text-xs uppercase tracking-[.32em] text-[var(--gold)]">In the Spirit of Día de los Muertos & Perpetual Remembrance</p>
+          <p className="mb-4 text-[11px] uppercase tracking-[.32em] text-[#E6A764]">In the Spirit of Día de los Muertos & Perpetual Remembrance</p>
           <h1 className="font-serif text-5xl leading-[1.05] md:text-8xl">Because some voices deserve to live beyond a lifetime.</h1>
-          <p className="mt-7 max-w-xl text-lg leading-8 text-white/70">
+          <p className="mt-6 max-w-xl text-base md:text-lg leading-relaxed text-white/70">
             A private, AI-powered memory sanctuary that helps families preserve the authentic voices, life lessons, photographs, and recipes of the people they love — protected by open-source AI and realistic voice narration.
           </p>
           
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <button className="rounded-full bg-[var(--gold)] px-8 py-4 font-semibold text-[var(--navy)] transition hover:bg-[var(--ivory)] shadow-lg shadow-[var(--gold)]/20" disabled={pending} onClick={onEnter}>
+          <div className="mt-8 flex flex-wrap items-center gap-3.5">
+            <button className="rounded-full bg-[#E6A764] px-8 py-3.5 text-xs font-semibold text-[#0A0E14] transition hover:bg-white shadow-lg" disabled={pending} onClick={onEnter}>
               {pending ? 'Opening archive...' : 'Enter Family Archive (Live Demo)'}
             </button>
-            <button className="rounded-full border border-white/30 px-6 py-4 text-sm font-medium hover:border-[var(--gold)] hover:text-[var(--gold)] transition" onClick={onEnter}>
-              Listen to Sample Heirlooms
+            <button className="rounded-full border border-white/30 px-6 py-3.5 text-xs font-medium hover:border-[#E6A764] hover:text-[#E6A764] transition" onClick={onEnter}>
+              Explore Heirlooms
             </button>
           </div>
           
-          <p className="mt-6 text-xs text-white/45">Zero corporate surveillance · Open-weight Gemma 2 & ElevenLabs Voice · Offline-ready sovereignty</p>
+          <p className="mt-6 text-[11px] text-white/40">Zero corporate surveillance · Open-weight Gemma 2 & ElevenLabs Voice · Offline-ready sovereignty</p>
         </div>
       </section>
     </main>
@@ -277,76 +546,13 @@ function Auth({ onBack, onSuccess }: { onBack: () => void; onSuccess: () => Prom
       else await onSuccess()
     })
   }
-  return <main className="grid min-h-screen place-items-center bg-[var(--navy)] p-5 text-[var(--ivory)]"><div className="w-full max-w-md rounded-3xl border border-white/10 bg-[var(--charcoal)] p-7 md:p-10"><button className="text-sm text-white/45 hover:text-white" onClick={onBack}>← Back to Archive</button><p className="mt-8 text-xs uppercase tracking-[.25em] text-[var(--gold)]">Private family space</p><h1 className="mt-3 font-serif text-4xl">{mode === 'signup' ? 'Create your archive.' : 'Welcome back.'}</h1><form className="mt-8 space-y-5" onSubmit={submit}>{mode === 'signup' && <label className="block"><span>Your name</span><input autoComplete="name" className="field" name="name" required placeholder="Alex Rivera" /></label>}<label className="block"><span>Email</span><input autoComplete="email" className="field" name="email" required type="email" placeholder="alex@family.org" /></label><label className="block"><span>Password</span><input autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} className="field" minLength={8} name="password" required type="password" /></label>{error && <p role="alert" className="rounded-xl border border-red-300/20 bg-red-400/10 p-3 text-sm text-red-100">{error}</p>}<button className="w-full rounded-full bg-[var(--gold)] py-4 font-medium text-[var(--navy)] disabled:opacity-50" disabled={pending}>{pending ? 'Please wait...' : mode === 'signup' ? 'Create secure archive' : 'Sign in'}</button></form><button className="mt-6 w-full text-sm text-white/45 hover:text-white" onClick={() => { setMode(mode === 'signup' ? 'login' : 'signup'); setError('') }}>{mode === 'signup' ? 'Already have an account? Sign in' : 'New to Echoes? Create an account'}</button></div></main>
+  return <main className="grid min-h-screen place-items-center bg-[#0A0E14] p-5 text-white"><div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.03] p-7 md:p-10"><button className="text-xs text-white/45 hover:text-white" onClick={onBack}>← Back to Archive</button><p className="mt-6 text-xs uppercase tracking-[.25em] text-[#E6A764]">Private family space</p><h1 className="mt-2 font-serif text-3xl">{mode === 'signup' ? 'Create your archive.' : 'Welcome back.'}</h1><form className="mt-6 space-y-4" onSubmit={submit}>{mode === 'signup' && <label className="block text-xs"><span>Your name</span><input autoComplete="name" className="field mt-1" name="name" required placeholder="Alex Rivera" /></label>}<label className="block text-xs"><span>Email</span><input autoComplete="email" className="field mt-1" name="email" required type="email" placeholder="alex@family.org" /></label><label className="block text-xs"><span>Password</span><input autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} className="field mt-1" minLength={8} name="password" required type="password" /></label>{error && <p role="alert" className="rounded-xl border border-red-300/20 bg-red-400/10 p-3 text-xs text-red-100">{error}</p>}<button className="w-full rounded-full bg-[#E6A764] py-3 text-xs font-semibold text-[#0A0E14] disabled:opacity-50" disabled={pending}>{pending ? 'Please wait...' : mode === 'signup' ? 'Create secure archive' : 'Sign in'}</button></form><button className="mt-5 w-full text-xs text-white/40 hover:text-white" onClick={() => { setMode(mode === 'signup' ? 'login' : 'signup'); setError('') }}>{mode === 'signup' ? 'Already have an account? Sign in' : 'New to Echoes? Create an account'}</button></div></main>
 }
 
 function ArchiveSetup({ name, onDone }: { name: string; onDone: () => Promise<void> }) {
   const [error, setError] = useState('')
   const [pending, startTransition] = useTransition()
-  return <main className="grid min-h-screen place-items-center bg-[var(--navy)] p-5 text-[var(--ivory)]"><form className="w-full max-w-xl rounded-3xl border border-white/10 bg-[var(--charcoal)] p-8 md:p-12" onSubmit={(event) => { event.preventDefault(); const value = String(new FormData(event.currentTarget).get('name') || ''); startTransition(async () => { const result = await createArchiveAction(value); if (result.ok) await onDone(); else setError(result.error) }) }}><p className="text-xs uppercase tracking-[.25em] text-[var(--gold)]">Welcome, {name}</p><h1 className="mt-3 font-serif text-5xl">Name your family archive.</h1><p className="mt-4 leading-7 text-white/50">You can begin with a family name, a household, or a branch of your story.</p><label className="mt-8 block"><span>Archive name</span><input autoFocus className="field" name="name" placeholder="The Rivera Family Archive" required /></label>{error && <p role="alert" className="mt-4 text-sm text-red-200">{error}</p>}<button className="mt-6 w-full rounded-full bg-[var(--gold)] py-4 font-medium text-[var(--navy)]" disabled={pending}>{pending ? 'Creating...' : 'Create archive'}</button></form></main>
-}
-
-function Dashboard({ memories, name, onCreate, onSelect, query, setQuery }: { memories: EchoMemory[]; name: string; onCreate: () => void; onSelect: (m: EchoMemory) => void; query: string; setQuery: (q: string) => void }) {
-  return (
-    <div>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase tracking-[.25em] text-[var(--gold)]">Living Memorial Archive</p>
-          <h2 className="mt-2 font-serif text-4xl md:text-5xl">Welcome home, {name}.</h2>
-          <p className="mt-2 text-sm text-white/50">The stories you save today become tomorrow's enduring legacy.</p>
-        </div>
-        <button className="rounded-full bg-[var(--gold)] px-6 py-3 font-medium text-[var(--navy)] hover:bg-[var(--ivory)] transition shadow-md" onClick={onCreate}>+ Capture New Memory</button>
-      </div>
-
-      <div className="mt-10">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
-          <h3 className="font-serif text-2xl">Preserved Memories ({memories.length})</h3>
-          {query && <button className="text-xs text-[var(--gold)] hover:underline" onClick={() => setQuery('')}>Clear search filter</button>}
-        </div>
-
-        {memories.length ? (
-          <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {memories.map((memory) => (
-              <article
-                key={memory.id}
-                onClick={() => onSelect(memory)}
-                className="group cursor-pointer rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:border-[var(--gold)]/50 hover:bg-white/[0.08] relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between text-xs text-[var(--gold)]">
-                  <span className="font-medium">✦ {memory.person}</span>
-                  <span className="text-white/40">{memory.date}</span>
-                </div>
-                
-                <h4 className="mt-3 font-serif text-xl line-clamp-2 group-hover:text-[var(--gold)] transition">{memory.title}</h4>
-                <p className="mt-3 text-sm leading-6 text-white/60 line-clamp-3">{memory.story}</p>
-                
-                <div className="mt-5 flex flex-wrap gap-1.5">
-                  {memory.tags.map((tag) => (
-                    <span key={tag} className="rounded-full border border-white/10 bg-black/20 px-2.5 py-0.5 text-[10px] text-white/50">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-5 flex items-center justify-between border-t border-white/5 pt-3 text-xs text-white/40">
-                  <span className="flex items-center gap-1 text-[var(--gold)]">
-                    <Icon name="sound" /> Listen & Explore
-                  </span>
-                  <span className="group-hover:translate-x-1 transition">Open →</span>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-10 rounded-3xl border border-dashed border-white/15 p-12 text-center text-white/45">
-            <p className="text-lg">No memories match your search.</p>
-            <p className="mt-2 text-sm">Record a voice story or write down a family remembrance to begin.</p>
-            <button className="mt-6 rounded-full bg-[var(--gold)] px-6 py-2.5 text-sm font-medium text-[var(--navy)]" onClick={onCreate}>Add First Memory</button>
-          </div>
-        )}
-      </div>
-    </div>
-  )
+  return <main className="grid min-h-screen place-items-center bg-[#0A0E14] p-5 text-white"><form className="w-full max-w-xl rounded-3xl border border-white/10 bg-white/[0.03] p-8 md:p-12" onSubmit={(event) => { event.preventDefault(); const value = String(new FormData(event.currentTarget).get('name') || ''); startTransition(async () => { const result = await createArchiveAction(value); if (result.ok) await onDone(); else setError(result.error) }) }}><p className="text-xs uppercase tracking-[.25em] text-[#E6A764]">Welcome, {name}</p><h1 className="mt-2 font-serif text-4xl">Name your family archive.</h1><p className="mt-3 text-xs text-white/50">You can begin with a family name, a household, or a branch of your story.</p><label className="mt-6 block text-xs"><span>Archive name</span><input autoFocus className="field mt-1.5" name="name" placeholder="The Rivera Family Archive" required /></label>{error && <p role="alert" className="mt-3 text-xs text-red-200">{error}</p>}<button className="mt-6 w-full rounded-full bg-[#E6A764] py-3 text-xs font-semibold text-[#0A0E14]" disabled={pending}>{pending ? 'Creating...' : 'Create archive'}</button></form></main>
 }
 
 function CreateForm({ archives, audioBlob, audioURL, onRecord, onSaved }: { archives: Archive[]; audioBlob: Blob | null; audioURL: string; onRecord: () => void; onSaved: () => Promise<void> }) {
@@ -399,43 +605,43 @@ function CreateForm({ archives, audioBlob, audioURL, onRecord, onSaved }: { arch
 
   return (
     <div className="max-w-2xl">
-      <p className="text-xs uppercase tracking-[.25em] text-[var(--gold)]">Preserve a Remembrance</p>
-      <h2 className="mt-2 font-serif text-4xl">Add to your family archive.</h2>
+      <p className="text-xs uppercase tracking-[.25em] text-[#E6A764]">Preserve a Remembrance</p>
+      <h2 className="mt-2 font-serif text-3xl">Add to your family archive.</h2>
       
-      <form className="mt-8 space-y-6" onSubmit={submit}>
+      <form className="mt-6 space-y-5" onSubmit={submit}>
         <input type="hidden" name="archive" value={archives[0]?.id || 'family-archive'} />
 
-        <label className="block">
-          <span className="text-sm font-medium">Memory Title *</span>
-          <input className="field mt-2" name="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Mom's Recipe for Sunday Stew" required />
+        <label className="block text-xs">
+          <span className="font-medium">Memory Title *</span>
+          <input className="field mt-1.5" name="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Mom's Recipe for Sunday Stew" required />
         </label>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="block">
-            <span className="text-sm font-medium">Whose Voice / Story?</span>
-            <input className="field mt-2" name="person" value={person} onChange={(e) => setPerson(e.target.value)} placeholder="e.g. Mom, Maya, Grandpa Joe" />
+        <div className="grid gap-3.5 md:grid-cols-2">
+          <label className="block text-xs">
+            <span className="font-medium">Whose Voice / Story?</span>
+            <input className="field mt-1.5" name="person" value={person} onChange={(e) => setPerson(e.target.value)} placeholder="e.g. Mom, Maya, Grandpa Joe" />
           </label>
-          <label className="block">
-            <span className="text-sm font-medium">Memory Date / Year</span>
-            <input className="field mt-2" name="date" type="date" />
+          <label className="block text-xs">
+            <span className="font-medium">Memory Date / Year</span>
+            <input className="field mt-1.5" name="date" type="date" />
           </label>
         </div>
 
-        <label className="block">
+        <label className="block text-xs">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">The Story & Real Words *</span>
+            <span className="font-medium">The Story & Real Words *</span>
             <button
               type="button"
               onClick={handleAiAssist}
               disabled={analyzing}
-              className="flex items-center gap-1.5 text-xs text-[var(--gold)] hover:underline disabled:opacity-50"
+              className="flex items-center gap-1.5 text-xs text-[#E6A764] hover:underline disabled:opacity-50"
             >
               <span>✨</span>
               <span>{analyzing ? 'Extracting Wisdom with Gemma AI...' : 'Auto-Extract Wisdom & Tags (AI)'}</span>
             </button>
           </div>
           <textarea
-            className="field mt-2 min-h-48"
+            className="field mt-1.5 min-h-40"
             name="story"
             value={story}
             onChange={(e) => setStory(e.target.value)}
@@ -445,33 +651,33 @@ function CreateForm({ archives, audioBlob, audioURL, onRecord, onSaved }: { arch
         </label>
 
         {aiNotes && (
-          <div className="rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold)]/10 p-4">
-            <p className="text-xs uppercase tracking-widest text-[var(--gold)] font-semibold">✨ Open-Weight AI Memory Analysis</p>
-            <p className="mt-2 text-xs leading-5 text-white/80 whitespace-pre-wrap">{aiNotes}</p>
+          <div className="rounded-2xl border border-[#E6A764]/30 bg-[#E6A764]/10 p-4">
+            <p className="text-[10px] uppercase tracking-widest text-[#E6A764] font-semibold">✨ Open-Weight AI Memory Analysis</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-white/80 whitespace-pre-wrap">{aiNotes}</p>
           </div>
         )}
 
-        <label className="block">
-          <span className="text-sm font-medium">Heirloom Tags (comma-separated)</span>
-          <input className="field mt-2" name="tags" placeholder="recipes, childhood, advice, holiday, laughter" />
+        <label className="block text-xs">
+          <span className="font-medium">Heirloom Tags (comma-separated)</span>
+          <input className="field mt-1.5" name="tags" placeholder="recipes, childhood, advice, holiday, laughter" />
         </label>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium">Voice Recording</p>
-              <p className="text-xs text-white/40">{audioURL ? 'Voice recording attached ✓' : 'Add an authentic voice recording'}</p>
+              <p className="text-xs font-medium">Voice Recording</p>
+              <p className="text-[10px] text-white/40">{audioURL ? 'Voice recording attached ✓' : 'Add an authentic voice recording'}</p>
             </div>
-            <button type="button" className="rounded-full border border-white/20 px-4 py-1.5 text-xs hover:border-[var(--gold)] hover:text-[var(--gold)] transition" onClick={onRecord}>
+            <button type="button" className="rounded-full border border-white/20 px-3 py-1 text-xs hover:border-[#E6A764] hover:text-[#E6A764] transition" onClick={onRecord}>
               {audioURL ? 'Re-record' : 'Record voice'}
             </button>
           </div>
-          {audioURL && <audio className="mt-4 w-full" controls src={audioURL} />}
+          {audioURL && <audio className="mt-3 w-full" controls src={audioURL} />}
         </div>
 
-        {error && <p role="alert" className="text-sm text-red-200">{error}</p>}
+        {error && <p role="alert" className="text-xs text-red-200">{error}</p>}
 
-        <button className="w-full rounded-full bg-[var(--gold)] py-4 font-semibold text-[var(--navy)] hover:bg-[var(--ivory)] transition disabled:opacity-50" disabled={pending}>
+        <button className="w-full rounded-full bg-[#E6A764] py-3 text-xs font-semibold text-[#0A0E14] hover:bg-white transition disabled:opacity-50" disabled={pending}>
           {pending ? 'Saving to Archive...' : 'Preserve Memory Forever'}
         </button>
       </form>
@@ -487,29 +693,29 @@ function Recorder({ audio, notice, paused, recording, seconds, onPause, onStart,
   }
 
   return (
-    <div className="max-w-xl text-center mx-auto py-12">
-      <p className="text-xs uppercase tracking-[.25em] text-[var(--gold)]">Voice of Remembrance</p>
-      <h2 className="mt-2 font-serif text-5xl">Capture their voice.</h2>
-      <p className="mt-3 text-sm text-white/50">Speak naturally. Tell a favorite story, a habit, or a lesson they passed down.</p>
+    <div className="max-w-xl text-center mx-auto py-10">
+      <p className="text-[11px] uppercase tracking-[.25em] text-[#E6A764]">Voice of Remembrance</p>
+      <h2 className="mt-2 font-serif text-4xl">Capture their voice.</h2>
+      <p className="mt-2 text-xs text-white/50">Speak naturally. Tell a favorite story, a habit, or a lesson they passed down.</p>
 
-      <div className="my-12">
-        <div className={`mx-auto flex h-36 w-36 items-center justify-center rounded-full border-2 transition-all ${recording ? 'border-red-400 bg-red-500/10 scale-105 animate-pulse' : 'border-[var(--gold)]/40 bg-[var(--gold)]/5'}`}>
-          <span className="font-mono text-3xl font-medium text-[var(--gold)]">{formatTime(seconds)}</span>
+      <div className="my-10">
+        <div className={`mx-auto flex h-32 w-32 items-center justify-center rounded-full border-2 transition-all ${recording ? 'border-red-400 bg-red-500/10 scale-105 animate-pulse' : 'border-[#E6A764]/40 bg-[#E6A764]/5'}`}>
+          <span className="font-mono text-2xl font-medium text-[#E6A764]">{formatTime(seconds)}</span>
         </div>
-        {recording && <p className="mt-4 text-xs tracking-widest uppercase text-red-400">● Live Recording</p>}
+        {recording && <p className="mt-3 text-[10px] tracking-widest uppercase text-red-400">● Live Recording</p>}
       </div>
 
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-3">
         {!recording ? (
-          <button className="rounded-full bg-[var(--gold)] px-8 py-3.5 font-medium text-[var(--navy)] hover:bg-[var(--ivory)] transition" onClick={onStart}>
+          <button className="rounded-full bg-[#E6A764] px-7 py-3 text-xs font-semibold text-[#0A0E14] hover:bg-white transition" onClick={onStart}>
             Start Recording
           </button>
         ) : (
           <>
-            <button className="rounded-full border border-white/20 px-6 py-3 text-sm hover:bg-white/10" onClick={onPause}>
+            <button className="rounded-full border border-white/20 px-5 py-2.5 text-xs hover:bg-white/10" onClick={onPause}>
               {paused ? 'Resume' : 'Pause'}
             </button>
-            <button className="rounded-full bg-red-400 px-6 py-3 text-sm font-medium text-[var(--navy)]" onClick={onStop}>
+            <button className="rounded-full bg-red-400 px-5 py-2.5 text-xs font-semibold text-[#0A0E14]" onClick={onStop}>
               Stop & Save
             </button>
           </>
@@ -517,16 +723,16 @@ function Recorder({ audio, notice, paused, recording, seconds, onPause, onStart,
       </div>
 
       {audio && (
-        <div className="mt-10 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-6">
-          <p className="text-xs uppercase tracking-widest text-[var(--gold)] font-medium">Recording Preview</p>
-          <audio className="mt-3 w-full" controls src={audio} />
-          <button className="mt-5 rounded-full bg-[var(--gold)] px-8 py-3 text-sm font-semibold text-[var(--navy)]" onClick={useRecording}>
+        <div className="mt-8 rounded-2xl border border-[#E6A764]/30 bg-[#E6A764]/5 p-5">
+          <p className="text-[10px] uppercase tracking-widest text-[#E6A764] font-medium">Recording Preview</p>
+          <audio className="mt-2.5 w-full" controls src={audio} />
+          <button className="mt-4 rounded-full bg-[#E6A764] px-6 py-2.5 text-xs font-semibold text-[#0A0E14]" onClick={useRecording}>
             Use This Recording in Memory →
           </button>
         </div>
       )}
 
-      {notice && <p role="alert" className="mt-4 text-sm text-amber-200">{notice}</p>}
+      {notice && <p role="alert" className="mt-3 text-xs text-amber-200">{notice}</p>}
     </div>
   )
 }
@@ -536,12 +742,10 @@ function Detail({ memory, onClose, onChanged }: { memory: EchoMemory; onClose: (
   const [error, setError] = useState('')
   const [pending, startTransition] = useTransition()
   
-  // ElevenLabs narration states
   const [narrationUrl, setNarrationUrl] = useState('')
   const [narrating, setNarrating] = useState(false)
   const [narrationError, setNarrationError] = useState('')
 
-  // Open-Weight AI analysis states
   const [aiAnalysis, setAiAnalysis] = useState<{
     summary?: string
     wisdom?: string
@@ -603,62 +807,62 @@ function Detail({ memory, onClose, onChanged }: { memory: EchoMemory; onClose: (
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 p-4 backdrop-blur-md md:p-10 flex items-center justify-center">
-      <article className="mx-auto w-full max-w-3xl rounded-3xl border border-white/10 bg-[var(--charcoal)] p-6 md:p-10 shadow-2xl relative">
+      <article className="mx-auto w-full max-w-3xl rounded-3xl border border-white/10 bg-[#0E131A] p-6 md:p-8 shadow-2xl relative">
         <div className="flex justify-end gap-2">
-          <button className="rounded-full border border-white/15 px-4 py-2 text-xs hover:border-white/30" onClick={() => setEditing(!editing)}>
+          <button className="rounded-full border border-white/15 px-3 py-1.5 text-xs hover:border-white/30" onClick={() => setEditing(!editing)}>
             {editing ? 'Cancel' : 'Edit story'}
           </button>
-          <button className="rounded-full border border-white/15 px-4 py-2 text-xs hover:border-white/30" onClick={onClose}>
+          <button className="rounded-full border border-white/15 px-3 py-1.5 text-xs hover:border-white/30" onClick={onClose}>
             Close ✕
           </button>
         </div>
 
         {editing ? (
-          <form className="mt-6 space-y-5" onSubmit={update}>
-            <label className="block"><span>Title</span><input className="field" defaultValue={memory.title} name="title" required /></label>
-            <label className="block"><span>Person</span><input className="field" defaultValue={memory.person === 'Unassigned' ? '' : memory.person} name="person" /></label>
-            <label className="block"><span>Memory</span><textarea className="field min-h-48" defaultValue={memory.story} name="story" required /></label>
-            <label className="block"><span>Private notes</span><textarea className="field min-h-28" defaultValue={memory.notes} name="notes" /></label>
-            {error && <p role="alert" className="text-sm text-red-200">{error}</p>}
-            <button className="w-full rounded-full bg-[var(--gold)] py-3 font-medium text-[var(--navy)]" disabled={pending}>
+          <form className="mt-5 space-y-4" onSubmit={update}>
+            <label className="block text-xs"><span>Title</span><input className="field mt-1" defaultValue={memory.title} name="title" required /></label>
+            <label className="block text-xs"><span>Person</span><input className="field mt-1" defaultValue={memory.person === 'Unassigned' ? '' : memory.person} name="person" /></label>
+            <label className="block text-xs"><span>Memory</span><textarea className="field mt-1 min-h-40" defaultValue={memory.story} name="story" required /></label>
+            <label className="block text-xs"><span>Private notes</span><textarea className="field mt-1 min-h-24" defaultValue={memory.notes} name="notes" /></label>
+            {error && <p role="alert" className="text-xs text-red-200">{error}</p>}
+            <button className="w-full rounded-full bg-[#E6A764] py-2.5 text-xs font-semibold text-[#0A0E14]" disabled={pending}>
               {pending ? 'Saving...' : 'Save changes'}
             </button>
           </form>
         ) : (
           <>
-            <p className="mt-4 text-xs uppercase tracking-widest text-[var(--gold)] font-medium">✦ {memory.date} · {memory.person}</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-5xl">{memory.title}</h2>
+            <p className="mt-2 text-[10px] uppercase tracking-widest text-[#E6A764] font-medium">✦ {memory.date} · {memory.person}</p>
+            <h2 className="mt-2 font-serif text-2xl md:text-4xl text-white">{memory.title}</h2>
             
             {/* The Real Words */}
-            <div className="mt-6 rounded-2xl border border-white/5 bg-white/[0.03] p-6">
-              <p className="whitespace-pre-wrap text-base md:text-lg leading-8 text-white/80 font-serif italic">
+            <div className="mt-5 rounded-2xl border border-white/5 bg-white/[0.02] p-5">
+              <p className="whitespace-pre-wrap text-sm md:text-base leading-relaxed text-white/80 font-serif italic">
                 "{memory.story}"
               </p>
             </div>
 
             {/* Authentic Audio Recording if attached */}
             {memory.audio && (
-              <div className="mt-6 rounded-2xl border border-white/10 p-4 bg-black/20">
-                <p className="text-xs uppercase tracking-wider text-white/50 mb-2">Original Voice Recording</p>
+              <div className="mt-5 rounded-2xl border border-white/10 p-3.5 bg-black/30">
+                <p className="text-[10px] uppercase tracking-wider text-white/50 mb-1.5">Original Voice Recording</p>
                 <audio className="w-full" controls src={memory.audio} />
               </div>
             )}
 
             {/* ElevenLabs Remembrance Narration Feature */}
-            <div className="mt-6 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-5">
+            <div className="mt-5 rounded-2xl border border-[#E6A764]/30 bg-[#E6A764]/5 p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm">🎙️</span>
-                    <p className="font-medium text-sm text-[var(--gold)]">ElevenLabs Voice Narration</p>
+                  <div className="flex items-center gap-1.5">
+                    <span>🎙️</span>
+                    <p className="font-medium text-xs text-[#E6A764]">ElevenLabs Voice Narration</p>
                   </div>
-                  <p className="text-xs text-white/50 mt-1">Hear this memory spoken in a gentle, warm commemorative voice.</p>
+                  <p className="text-[11px] text-white/50 mt-0.5">Hear this memory spoken in a gentle, warm commemorative voice.</p>
                 </div>
                 {!narrationUrl && (
                   <button
                     onClick={handleNarrate}
                     disabled={narrating}
-                    className="rounded-full bg-[var(--gold)] px-4 py-2 text-xs font-semibold text-[var(--navy)] hover:bg-[var(--ivory)] transition disabled:opacity-50"
+                    className="rounded-full bg-[#E6A764] px-4 py-1.5 text-xs font-semibold text-[#0A0E14] hover:bg-white transition disabled:opacity-50"
                   >
                     {narrating ? 'Generating Voice...' : 'Listen to Narration'}
                   </button>
@@ -666,8 +870,8 @@ function Detail({ memory, onClose, onChanged }: { memory: EchoMemory; onClose: (
               </div>
 
               {narrationUrl && (
-                <div className="mt-4 pt-3 border-t border-[var(--gold)]/20">
-                  <p className="text-xs text-[var(--gold)] font-medium mb-1.5">✦ Remembrance Voice Playing:</p>
+                <div className="mt-3 pt-2.5 border-t border-[#E6A764]/20">
+                  <p className="text-[10px] text-[#E6A764] font-medium mb-1">✦ Remembrance Voice Playing:</p>
                   <audio className="w-full" autoPlay controls src={narrationUrl} />
                 </div>
               )}
@@ -675,17 +879,17 @@ function Detail({ memory, onClose, onChanged }: { memory: EchoMemory; onClose: (
             </div>
 
             {/* Open-Weight AI (Gemma/Qwen) Wisdom Extraction Feature */}
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+            <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">🧠</span>
-                  <p className="font-medium text-sm text-white/90">Open-Weight AI Wisdom & Tribute</p>
+                <div className="flex items-center gap-1.5">
+                  <span>🧠</span>
+                  <p className="font-medium text-xs text-white/90">Open-Weight AI Wisdom & Tribute</p>
                 </div>
                 {!aiAnalysis && (
                   <button
                     onClick={handleAnalyze}
                     disabled={analyzing}
-                    className="rounded-full border border-white/20 px-3 py-1.5 text-xs text-[var(--gold)] hover:border-[var(--gold)] transition disabled:opacity-50"
+                    className="rounded-full border border-white/20 px-3 py-1 text-xs text-[#E6A764] hover:border-[#E6A764] transition disabled:opacity-50"
                   >
                     {analyzing ? 'Analyzing with AI...' : 'Reveal Wisdom'}
                   </button>
@@ -693,23 +897,23 @@ function Detail({ memory, onClose, onChanged }: { memory: EchoMemory; onClose: (
               </div>
 
               {aiAnalysis ? (
-                <div className="mt-4 space-y-3 pt-3 border-t border-white/10 text-xs">
+                <div className="mt-3 space-y-2.5 pt-2.5 border-t border-white/10 text-xs">
                   {aiAnalysis.wisdom && (
-                    <div className="rounded-xl bg-[var(--gold)]/10 border border-[var(--gold)]/20 p-3">
-                      <p className="text-[10px] uppercase tracking-wider text-[var(--gold)] font-semibold">Core Life Lesson</p>
-                      <p className="text-sm font-serif italic text-white/90 mt-1">"{aiAnalysis.wisdom}"</p>
+                    <div className="rounded-xl bg-[#E6A764]/10 border border-[#E6A764]/20 p-2.5">
+                      <p className="text-[9px] uppercase tracking-wider text-[#E6A764] font-semibold">Core Life Lesson</p>
+                      <p className="text-xs font-serif italic text-white/90 mt-0.5">"{aiAnalysis.wisdom}"</p>
                     </div>
                   )}
                   {aiAnalysis.summary && (
                     <div>
-                      <p className="text-[10px] uppercase tracking-wider text-white/40">Memorial Tribute</p>
-                      <p className="text-white/70 mt-0.5 leading-5">{aiAnalysis.summary}</p>
+                      <p className="text-[9px] uppercase tracking-wider text-white/40">Memorial Tribute</p>
+                      <p className="text-white/70 mt-0.5 leading-relaxed">{aiAnalysis.summary}</p>
                     </div>
                   )}
                   {aiAnalysis.tags && (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
+                    <div className="flex flex-wrap gap-1 pt-1">
                       {aiAnalysis.tags.map((t) => (
-                        <span key={t} className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-[var(--gold)]">
+                        <span key={t} className="rounded-full bg-white/10 px-2 py-0.5 text-[9px] text-[#E6A764]">
                           #{t}
                         </span>
                       ))}
@@ -717,24 +921,24 @@ function Detail({ memory, onClose, onChanged }: { memory: EchoMemory; onClose: (
                   )}
                 </div>
               ) : (
-                <p className="text-xs text-white/45 mt-2">
+                <p className="text-[11px] text-white/45 mt-1.5">
                   Click 'Reveal Wisdom' to have open-weight AI extract the deeper life lesson and commemorative tribute from these words.
                 </p>
               )}
             </div>
 
-            {/* Tags & Metadata */}
-            <div className="mt-6 flex flex-wrap gap-2">
+            {/* Tags */}
+            <div className="mt-5 flex flex-wrap gap-1.5">
               {memory.tags.map((tag) => (
-                <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60">
+                <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] text-white/60">
                   #{tag}
                 </span>
               ))}
             </div>
 
-            <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-4">
+            <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
               <button
-                className="text-xs text-red-300 hover:text-red-200 underline underline-offset-4"
+                className="text-[11px] text-red-300 hover:text-red-200 underline underline-offset-4"
                 disabled={pending}
                 onClick={() => {
                   if (window.confirm('Permanently delete this memory? This cannot be undone.')) {
@@ -748,11 +952,11 @@ function Detail({ memory, onClose, onChanged }: { memory: EchoMemory; onClose: (
               >
                 Delete memory
               </button>
-              <button className="rounded-full bg-white/10 px-5 py-2 text-xs hover:bg-white/20 transition" onClick={onClose}>
+              <button className="rounded-full bg-white/10 px-4 py-1.5 text-xs hover:bg-white/20 transition" onClick={onClose}>
                 Back to Archive
               </button>
             </div>
-            {error && <p role="alert" className="mt-3 text-sm text-red-200">{error}</p>}
+            {error && <p role="alert" className="mt-3 text-xs text-red-200">{error}</p>}
           </>
         )}
       </article>
@@ -773,24 +977,26 @@ function tagCards(memories: EchoMemory[]) {
 }
 
 function SimplePage({ eyebrow, title, copy, cards }: { eyebrow: string; title: string; copy: string; cards: string[] }) {
-  return <div><p className="text-xs uppercase tracking-[.25em] text-[var(--gold)]">{eyebrow}</p><h2 className="mt-3 font-serif text-5xl">{title}</h2><p className="mt-4 max-w-xl text-white/50">{copy}</p>{cards.length ? <div className="mt-10 grid gap-4 md:grid-cols-3">{cards.map((card) => <div className="rounded-2xl border border-white/10 bg-white/5 p-6" key={card}><div className="mb-12 h-12 w-12 rounded-full bg-[var(--amber)]/20 flex items-center justify-center text-lg">✦</div><h3 className="font-serif text-xl">{card}</h3><p className="mt-2 text-sm text-white/40">Generated from saved memories</p></div>)}</div> : <div className="mt-10 rounded-2xl border border-dashed border-white/15 p-10 text-center text-white/40">No saved memories to organize yet.</div>}</div>
+  return <div><p className="text-xs uppercase tracking-[.25em] text-[#E6A764]">{eyebrow}</p><h2 className="mt-2 font-serif text-4xl text-white">{title}</h2><p className="mt-2 max-w-xl text-xs text-white/50">{copy}</p>{cards.length ? <div className="mt-8 grid gap-4 md:grid-cols-3">{cards.map((card) => <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5" key={card}><div className="mb-8 h-10 w-10 rounded-full bg-[#E6A764]/20 flex items-center justify-center text-sm text-[#E6A764]">✦</div><h3 className="font-serif text-lg text-white">{card}</h3><p className="mt-1 text-[11px] text-white/40">Generated from saved memories</p></div>)}</div> : <div className="mt-8 rounded-2xl border border-dashed border-white/15 p-10 text-center text-white/40 text-xs">No saved memories to organize yet.</div>}</div>
 }
 
 function Privacy({ memories }: { memories: number }) {
   return (
-    <div className="max-w-3xl">
-      <p className="text-xs uppercase tracking-[.25em] text-[var(--gold)]">Privacy & Sovereignty</p>
-      <h2 className="mt-3 font-serif text-5xl">Your stories, under your control.</h2>
-      <div className="mt-10 space-y-4">
+    <div className="max-w-3xl space-y-6">
+      <div>
+        <p className="text-xs uppercase tracking-[.25em] text-[#E6A764]">Privacy & Sovereignty</p>
+        <h2 className="mt-2 font-serif text-4xl text-white">Your stories, under your control.</h2>
+      </div>
+      <div className="space-y-3.5">
         {[
           ['Sovereign Memory Storage', `${memories} preserved memories are scoped to your private session. Your recordings and photos are stored securely and never harvested for advertising.`],
           ['Open-Weight AI Architecture', 'Memory summarization and wisdom extraction are powered by genuine open-weight models (Qwen/Gemma). You have the option to run them locally on your own machine without sending data to closed corporate clouds.'],
           ['ElevenLabs Voice Security', 'Voice narrations are synthesized on-demand with state-of-the-art neural speech. Audio streams are encrypted in transit and never used to clone unconsented voices.'],
           ['Permanent Deletion & Portability', 'You retain total ownership of every syllable. You can edit, delete, or export your family archive at any moment.']
         ].map(([title, copy]) => (
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6" key={title}>
-            <h3 className="font-serif text-2xl text-[var(--gold)]">{title}</h3>
-            <p className="mt-2 leading-7 text-white/70">{copy}</p>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5" key={title}>
+            <h3 className="font-serif text-lg text-[#E6A764]">{title}</h3>
+            <p className="mt-1.5 leading-relaxed text-xs text-white/70">{copy}</p>
           </div>
         ))}
       </div>
