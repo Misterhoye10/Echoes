@@ -2,37 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-type TrackOption = {
-  id: string
-  name: string
-  src: string
-  label: string
-}
-
-const TRACKS: TrackOption[] = [
-  {
-    id: 'instrumental',
-    name: 'See You Again (Official Instrumental)',
-    src: '/audio/see-you-again-instrumental.mp3',
-    label: 'Studio Instrumental',
-  },
-  {
-    id: 'piano',
-    name: 'See You Again (Acoustic Piano)',
-    src: '/audio/see-you-again-piano.mp3',
-    label: 'Solo Piano',
-  },
-]
-
 export function AmbientAudio() {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [volume, setVolume] = useState(0.4)
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
+  const [volume, setVolume] = useState(0.5)
+  const [showVolume, setShowVolume] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-
-  const currentTrack = TRACKS[currentTrackIndex]
 
   useEffect(() => {
     if (audioRef.current) {
@@ -56,87 +30,74 @@ export function AmbientAudio() {
     }
   }
 
-  const switchTrack = (index: number) => {
-    setCurrentTrackIndex(index)
-    if (audioRef.current) {
-      audioRef.current.src = TRACKS[index].src
-      audioRef.current.currentTime = 0
-      if (isPlaying) {
-        audioRef.current.play().catch((err) => console.error(err))
-      }
-    }
-  }
-
-  const formatTime = (sec: number) => {
-    if (isNaN(sec) || sec === 0) return '0:00'
-    const m = Math.floor(sec / 60)
-    const s = Math.floor(sec % 60)
-    return `${m}:${s < 10 ? '0' : ''}${s}`
-  }
-
   return (
-    <div className="flex items-center gap-2 rounded-full border border-[#E6A764]/40 bg-white/[0.04] px-3.5 py-1.5 text-xs shadow-md backdrop-blur-md">
-      {/* Hidden HTML5 Audio Element */}
+    <div
+      className="relative flex items-center"
+      onMouseEnter={() => setShowVolume(true)}
+      onMouseLeave={() => setShowVolume(false)}
+    >
+      {/* Official "See You Again" Instrumental Audio Element */}
       <audio
         ref={audioRef}
-        src={currentTrack.src}
+        src="/audio/see-you-again-instrumental.mp3"
         loop
         preload="auto"
-        onTimeUpdate={() => {
-          if (audioRef.current) {
-            setCurrentTime(audioRef.current.currentTime)
-          }
-        }}
-        onLoadedMetadata={() => {
-          if (audioRef.current) {
-            setDuration(audioRef.current.duration)
-          }
-        }}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
       />
 
-      {/* Main Play/Pause Button */}
+      {/* Minimalist Sound Icon Button */}
       <button
         onClick={togglePlay}
-        className="flex items-center gap-1.5 text-[#E6A764] hover:text-white transition font-medium"
-        title={isPlaying ? 'Pause Instrumental' : 'Play See You Again Instrumental'}
+        className={`group relative flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-300 ${
+          isPlaying
+            ? 'border-[#E6A764]/70 bg-[#E6A764]/20 text-[#E6A764] shadow-md shadow-[#E6A764]/20'
+            : 'border-white/15 bg-white/[0.04] text-white/70 hover:border-[#E6A764]/50 hover:bg-white/[0.08] hover:text-[#E6A764]'
+        }`}
+        title={isPlaying ? 'Pause Instrumental' : 'Play "See You Again" Instrumental'}
+        aria-label={isPlaying ? 'Pause music' : 'Play music'}
       >
-        <span className={isPlaying ? 'animate-pulse text-sm' : 'text-sm'}>
-          {isPlaying ? '🎵' : '▶️'}
-        </span>
-        <span className="tracking-wide">
-          {isPlaying ? 'See You Again' : 'Play Instrumental'}
-        </span>
+        {isPlaying ? (
+          /* Animated sound wave bars signifying playback */
+          <div className="flex items-center gap-[2.5px] h-3.5 px-1">
+            <span className="w-[2.5px] h-2 bg-[#E6A764] rounded-full animate-[pulse_0.7s_ease-in-out_infinite]" />
+            <span className="w-[2.5px] h-3.5 bg-[#E6A764] rounded-full animate-[pulse_0.9s_ease-in-out_infinite_0.15s]" />
+            <span className="w-[2.5px] h-2.5 bg-[#E6A764] rounded-full animate-[pulse_0.6s_ease-in-out_infinite_0.3s]" />
+            <span className="w-[2.5px] h-3 bg-[#E6A764] rounded-full animate-[pulse_0.8s_ease-in-out_infinite_0.45s]" />
+          </div>
+        ) : (
+          /* Elegant speaker audio icon signifying play */
+          <svg
+            className="h-4 w-4 transition-transform group-hover:scale-110"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M11 5L6 9H2v6h4l5 4V5z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.54 8.46a5 5 0 0 1 0 7.07"
+              className="opacity-70"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19.07 4.93a10 10 0 0 1 0 14.14"
+              className="opacity-40"
+            />
+          </svg>
+        )}
       </button>
 
-      {/* When Playing: Show Track Switcher, Time & Volume */}
+      {/* Smooth volume slider reveals when playing or hovered */}
       {isPlaying && (
-        <div className="flex items-center gap-2 pl-2 border-l border-white/10">
-          {/* Track switch toggle (Official vs Piano) */}
-          <div className="flex rounded-md bg-white/[0.06] p-0.5 text-[10px]">
-            {TRACKS.map((track, i) => (
-              <button
-                key={track.id}
-                onClick={() => switchTrack(i)}
-                className={`rounded px-1.5 py-0.5 transition ${
-                  currentTrackIndex === i
-                    ? 'bg-[#E6A764] text-[#0A0E14] font-semibold'
-                    : 'text-white/60 hover:text-white'
-                }`}
-                title={`Switch to ${track.name}`}
-              >
-                {track.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Time indicator */}
-          <span className="text-[10px] text-white/40 tabular-nums">
-            {formatTime(currentTime)}
-          </span>
-
-          {/* Volume slider */}
+        <div className={`flex items-center pl-2 transition-all duration-300 ${showVolume ? 'opacity-100 max-w-20' : 'opacity-40 max-w-16'}`}>
           <input
             type="range"
             min="0"

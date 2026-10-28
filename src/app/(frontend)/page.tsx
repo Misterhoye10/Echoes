@@ -496,37 +496,72 @@ function DashboardView({
 
 function Landing({ onEnter, onSignIn, pending }: { onEnter: () => void; onSignIn: () => void; pending: boolean }) {
   return (
-    <main className="min-h-screen bg-[#0A0E14] text-[#E8EDF2]">
-      <nav className="absolute z-10 flex w-full items-center justify-between px-6 py-6 md:px-12">
+    <main className="relative min-h-screen bg-[#0A0E14] text-[#E8EDF2] overflow-hidden">
+      {/* 1. Full-screen Sunset Photograph */}
+      <div className="absolute inset-0 z-0">
+        <img
+          alt="Mother and daughter walking along the shoreline at golden sunset"
+          className="h-full w-full object-cover object-[center_35%]"
+          src="/sunset.jpg"
+        />
+        {/* 2. Deep Cinematic Dark Overlay for Contrast & Intimacy */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0E14] via-[#0A0E14]/75 to-black/50" />
+        <div className="absolute inset-0 bg-radial-[at_center] from-transparent via-[#0A0E14]/40 to-[#0A0E14]/90" />
+      </div>
+
+      {/* Top Navigation */}
+      <nav className="relative z-10 flex w-full items-center justify-between px-6 py-6 md:px-12">
         <div className="flex items-center gap-3">
-          <span className="font-serif text-3xl text-[#E6A764]">🌾 Echoes</span>
+          <span className="font-serif text-3xl font-medium tracking-wide text-[#E6A764] drop-shadow">🌾 Echoes</span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          {/* Minimalist Sound Icon Button (Signifies Play / Audio) */}
           <AmbientAudio />
-          <button className="rounded-full border border-white/20 px-5 py-1.5 text-xs hover:border-[#E6A764] hover:text-[#E6A764] transition" disabled={pending} onClick={onSignIn}>Sign in</button>
+          <button
+            className="rounded-full border border-white/20 bg-black/30 backdrop-blur-md px-5 py-1.5 text-xs font-medium text-white hover:border-[#E6A764] hover:text-[#E6A764] transition"
+            disabled={pending}
+            onClick={onSignIn}
+          >
+            Sign in
+          </button>
         </div>
       </nav>
 
-      <section className="relative flex min-h-screen items-end overflow-hidden px-6 pb-20 pt-32 md:items-center md:px-14">
-        <img alt="Quiet family memory portrait at sunset" className="absolute inset-0 h-full w-full object-cover opacity-35" src="/preview.png" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0E14] via-[#0A0E14]/85 to-transparent" />
-        <div className="relative max-w-3xl">
-          <p className="mb-4 text-[11px] uppercase tracking-[.32em] text-[#E6A764]">In the Spirit of Día de los Muertos & Perpetual Remembrance</p>
-          <h1 className="font-serif text-5xl leading-[1.05] md:text-8xl">Because some voices deserve to live beyond a lifetime.</h1>
-          <p className="mt-6 max-w-xl text-base md:text-lg leading-relaxed text-white/70">
-            A private, AI-powered memory sanctuary that helps families preserve the authentic voices, life lessons, photographs, and recipes of the people they love — protected by open-source AI and realistic voice narration.
+      {/* Hero Content with Tagline */}
+      <section className="relative z-10 flex min-h-[calc(100vh-5rem)] items-center px-6 pb-20 pt-16 md:px-16">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#E6A764]/30 bg-black/40 backdrop-blur-md px-3.5 py-1 text-[11px] uppercase tracking-[.28em] text-[#E6A764] mb-6">
+            <span>✦</span>
+            <span>Family Memory Sanctuary · In Perpetual Remembrance</span>
+          </div>
+
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.08] tracking-tight text-white drop-shadow-xl">
+            Because some voices deserve to live beyond a lifetime.
+          </h1>
+
+          <p className="mt-6 max-w-xl text-base md:text-lg leading-relaxed text-white/80 drop-shadow">
+            A private, AI-powered sanctuary where families safeguard authentic voices, stories, heirloom photos, and generational wisdom — without synthetic chatbot impersonation.
           </p>
-          
-          <div className="mt-8 flex flex-wrap items-center gap-3.5">
-            <button className="rounded-full bg-[#E6A764] px-8 py-3.5 text-xs font-semibold text-[#0A0E14] transition hover:bg-white shadow-lg" disabled={pending} onClick={onEnter}>
+
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <button
+              className="rounded-full bg-[#E6A764] px-8 py-3.5 text-xs font-semibold text-[#0A0E14] transition hover:bg-white shadow-xl hover:scale-[1.02] duration-200"
+              disabled={pending}
+              onClick={onEnter}
+            >
               {pending ? 'Opening archive...' : 'Enter Family Archive (Live Demo)'}
             </button>
-            <button className="rounded-full border border-white/30 px-6 py-3.5 text-xs font-medium hover:border-[#E6A764] hover:text-[#E6A764] transition" onClick={onEnter}>
-              Explore Heirlooms
+            <button
+              className="rounded-full border border-white/30 bg-black/30 backdrop-blur-md px-6 py-3.5 text-xs font-medium text-white hover:border-[#E6A764] hover:text-[#E6A764] transition"
+              onClick={onEnter}
+            >
+              Explore Heirlooms →
             </button>
           </div>
-          
-          <p className="mt-6 text-[11px] text-white/40">Zero corporate surveillance · Open-weight Gemma 2 & ElevenLabs Voice · Offline-ready sovereignty</p>
+
+          <p className="mt-8 text-[11px] text-white/50 tracking-wide">
+            Zero advertising surveillance · Authentic ElevenLabs voice narration · Open-weight privacy
+          </p>
         </div>
       </section>
     </main>
