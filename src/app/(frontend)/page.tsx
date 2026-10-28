@@ -81,7 +81,7 @@ export default function Echoes() {
   const [view, setView] = useState<View>('home')
   const [memories, setMemories] = useState<EchoMemory[]>(STARTER_MEMORIES)
   const [archives, setArchives] = useState<Archive[]>([{ id: 'family-archive', name: 'Family Archive' }])
-  const [name, setName] = useState('Alex Rivera')
+  const [name, setName] = useState('Folarin Oyewole')
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<EchoMemory | null>(null)
   const [seconds, setSeconds] = useState(0)
@@ -109,7 +109,7 @@ export default function Echoes() {
     }
     setMemories(workspace.memories.length ? workspace.memories : STARTER_MEMORIES)
     setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: 'Family Archive' }])
-    setName(workspace.name || 'Alex Rivera')
+    setName(workspace.name || 'Folarin Oyewole')
     return true
   }
 
@@ -121,7 +121,7 @@ export default function Echoes() {
     }
     setMemories(workspace.memories.length ? workspace.memories : STARTER_MEMORIES)
     setArchives(workspace.archives.length ? workspace.archives : [{ id: 'family-archive', name: 'Family Archive' }])
-    setName(workspace.name || 'Alex Rivera')
+    setName(workspace.name || 'Folarin Oyewole')
     setView('dashboard')
   })
 
@@ -205,7 +205,7 @@ export default function Echoes() {
           <AmbientAudio />
           <div className="flex items-center gap-2 pl-2 border-l border-white/10">
             <div className="h-8 w-8 rounded-full bg-[#E6A764]/20 border border-[#E6A764]/40 flex items-center justify-center text-xs font-semibold text-[#E6A764]">
-              AR
+              {name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase() || 'FO'}
             </div>
           </div>
         </div>
@@ -246,8 +246,8 @@ export default function Echoes() {
                 👤
               </div>
               <div className="text-left text-xs">
-                <p className="font-medium text-white/90 leading-tight">Alex Rivera</p>
-                <p className="text-[10px] text-white/40">Family Archive</p>
+                <p className="font-medium text-white/90 leading-tight">{name}</p>
+                <p className="text-[10px] text-white/40">{archives[0]?.name || 'Family Memory Archive'}</p>
               </div>
             </div>
             <button
@@ -581,7 +581,40 @@ function Auth({ onBack, onSuccess }: { onBack: () => void; onSuccess: () => Prom
       else await onSuccess()
     })
   }
-  return <main className="grid min-h-screen place-items-center bg-[#0A0E14] p-5 text-white"><div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.03] p-7 md:p-10"><button className="text-xs text-white/45 hover:text-white" onClick={onBack}>← Back to Archive</button><p className="mt-6 text-xs uppercase tracking-[.25em] text-[#E6A764]">Private family space</p><h1 className="mt-2 font-serif text-3xl">{mode === 'signup' ? 'Create your archive.' : 'Welcome back.'}</h1><form className="mt-6 space-y-4" onSubmit={submit}>{mode === 'signup' && <label className="block text-xs"><span>Your name</span><input autoComplete="name" className="field mt-1" name="name" required placeholder="Alex Rivera" /></label>}<label className="block text-xs"><span>Email</span><input autoComplete="email" className="field mt-1" name="email" required type="email" placeholder="alex@family.org" /></label><label className="block text-xs"><span>Password</span><input autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} className="field mt-1" minLength={8} name="password" required type="password" /></label>{error && <p role="alert" className="rounded-xl border border-red-300/20 bg-red-400/10 p-3 text-xs text-red-100">{error}</p>}<button className="w-full rounded-full bg-[#E6A764] py-3 text-xs font-semibold text-[#0A0E14] disabled:opacity-50" disabled={pending}>{pending ? 'Please wait...' : mode === 'signup' ? 'Create secure archive' : 'Sign in'}</button></form><button className="mt-5 w-full text-xs text-white/40 hover:text-white" onClick={() => { setMode(mode === 'signup' ? 'login' : 'signup'); setError('') }}>{mode === 'signup' ? 'Already have an account? Sign in' : 'New to Echoes? Create an account'}</button></div></main>
+  return (
+    <main className="grid min-h-screen place-items-center bg-[#0A0E14] p-5 text-white">
+      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.03] p-7 md:p-10 backdrop-blur-xl">
+        <button className="text-xs text-white/45 hover:text-white transition" onClick={onBack}>
+          ← Back to Archive
+        </button>
+        <p className="mt-6 text-xs uppercase tracking-[.25em] text-[#E6A764]">Private family space</p>
+        <h1 className="mt-2 font-serif text-3xl">{mode === 'signup' ? 'Create your archive.' : 'Welcome back.'}</h1>
+        <form className="mt-6 space-y-4" onSubmit={submit}>
+          {mode === 'signup' && (
+            <label className="block text-xs">
+              <span className="text-white/70">Your Name</span>
+              <input autoComplete="name" className="field mt-1" name="name" required placeholder="e.g. Folarin Oyewole" />
+            </label>
+          )}
+          <label className="block text-xs">
+            <span className="text-white/70">Email Address</span>
+            <input autoComplete="email" className="field mt-1" name="email" required type="email" placeholder="e.g. yourname@gmail.com" />
+          </label>
+          <label className="block text-xs">
+            <span className="text-white/70">Password</span>
+            <input autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} className="field mt-1" minLength={6} name="password" required type="password" placeholder="At least 6 characters" />
+          </label>
+          {error && <p role="alert" className="rounded-xl border border-red-300/20 bg-red-400/10 p-3 text-xs text-red-200">{error}</p>}
+          <button className="w-full rounded-full bg-[#E6A764] py-3 text-xs font-semibold text-[#0A0E14] hover:bg-white transition disabled:opacity-50" disabled={pending}>
+            {pending ? 'Please wait...' : mode === 'signup' ? 'Create secure archive' : 'Sign in'}
+          </button>
+        </form>
+        <button className="mt-5 w-full text-xs text-white/40 hover:text-white transition" onClick={() => { setMode(mode === 'signup' ? 'login' : 'signup'); setError('') }}>
+          {mode === 'signup' ? 'Already have an account? Sign in' : 'New to Echoes? Create an account'}
+        </button>
+      </div>
+    </main>
+  )
 }
 
 function ArchiveSetup({ name, onDone }: { name: string; onDone: () => Promise<void> }) {
